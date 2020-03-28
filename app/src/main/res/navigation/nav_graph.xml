@@ -16,8 +16,13 @@
         android:label="fragment_appointment"
         tools:layout="@layout/fragment_appointment" />
     <fragment
-        android:id="@+id/chatFragment"
+        android:id="@+id/customerPayFragment"
+        android:name="com.example.specialistfinderapp.CustomerPayFragment"
+        android:label="fragment_customer_pay"
+        tools:layout="@layout/fragment_customer_pay" />
+    <fragment
+        android:id="@+id/customerChatFragment"
         android:name="com.example.specialistfinderapp.CustomerChatFragment"
-        android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        android:label="fragment_customer_chat"
+        tools:layout="@layout/fragment_customer_chat" />
 </navigation>
