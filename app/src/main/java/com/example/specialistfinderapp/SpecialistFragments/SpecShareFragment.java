@@ -1,4 +1,4 @@
-package com.example.specialistfinderapp;
+package com.example.specialistfinderapp.SpecialistFragments;
 
 
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.specialistfinderapp.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +20,13 @@ public class SpecShareFragment extends Fragment {
 
     public SpecShareFragment() {
         // Required empty public constructor
+    }
+
+    public static SpecShareFragment newInstance() {
+        SpecShareFragment fragment = new SpecShareFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
 
 

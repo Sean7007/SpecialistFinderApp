@@ -1,4 +1,4 @@
-package com.example.specialistfinderapp;
+package com.example.specialistfinderapp.SpecialistFragments;
 
 
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.specialistfinderapp.R;
 
 
 /**
@@ -19,6 +21,13 @@ public class SpecApointmentFragment extends Fragment {
     public SpecApointmentFragment() {
         // Required empty public constructor
     }
+    public static SpecApointmentFragment newInstance() {
+        SpecApointmentFragment fragment = new SpecApointmentFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
 
     @Override
