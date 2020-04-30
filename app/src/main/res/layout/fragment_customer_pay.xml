@@ -1,14 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:textAlignment="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".CustomerFragments.CustomerPayFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="PAYMENttt" />
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:textStyle="italic"
+        android:textSize="20sp"
+        android:text="There are 3 payment options for customers which is through use of bank card, My Zaka services and Orange Money."
+        />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/card_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="172dp"
+        android:layout_marginRight="40dp"
+        android:background="@color/quantum_grey"
+        android:text="Card"
+        android:textColor="@color/quantum_black_100" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/card_button"
+        android:layout_marginBottom="-97dp"
+        android:text="MyZaka"
+        android:background="@color/quantum_yellow"
+
+        app:layout_constraintStart_toStartOf="@id/card_button" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_marginBottom="-100dp"
+        android:background="@color/quantum_orange"
+        android:text="Orange Money" />
+</RelativeLayout>
