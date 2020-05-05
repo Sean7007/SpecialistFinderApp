@@ -1,9 +1,11 @@
 package com.example.specialistfinderapp.CustomerFragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -18,6 +20,8 @@ import com.example.specialistfinderapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.OnClick;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +33,12 @@ public class CustomerAppointmentFragment extends Fragment {
     private static CustomerAppointmentFragment INSTANCE =null;
     View view;
 
+    @OnClick(R.id.card_view_booking)
+            void booking(){
+        startActivity(new Intent(getActivity(), BookingActivity.class));
+
+    }
+    CardView card_booking_info;
     //Constructor
     public CustomerAppointmentFragment() {
         // Required empty public constructor
