@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:backgroundTint="@color/background"
+    tools:context=".Genysis.CustomerForgot">
+
+    <!--<LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="75dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="FORGOT PASSWORD!?"
+            android:textColor="@color/background"
+            android:textSize="25dp"
+            android:textAlignment="gravity"
+            android:layout_marginBottom="35dp"
+            ></TextView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="We just need your registered Email to send your password reset instructions"
+            android:textColor="@android:color/background_dark"
+            android:textSize="15dp"
+            android:textAlignment="gravity"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            ></TextView>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:id="@+id/email"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RESET PASSWORD!"
+            android:id="@+id/reset_password"
+            android:layout_marginBottom="15dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp"/>
+
+        <TextView
+            android:id="@+id/backTextView"
+            android:layout_width="351dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginEnd="150dp"
+            android:layout_marginBottom="100dp"
+            android:text="<<BACK"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+    </LinearLayout>!-->
+
+</LinearLayout>

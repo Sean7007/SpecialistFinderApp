@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:backgroundTint="@color/background"
+    tools:context=".Genysis.SpecialistLogin">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="75dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="SPECIALIST'S LOGIN"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="20dp"
+            android:textAlignment="gravity"
+            android:layout_marginBottom="30dp"
+            ></TextView>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:id="@+id/email"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:id="@+id/password"
+            android:layout_marginBottom="15dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textColor="@color/login_btn"
+            android:id="@+id/login"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:textColor="@color/login_btn"
+            android:id="@+id/back"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp" />
+
+        <TextView
+            android:id="@+id/forgotPasswordTextView"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="160dp"
+            android:layout_marginEnd="150dp"
+            android:layout_marginBottom="30dp"
+            android:text="Forgot Password? Click Here!"
+            android:textSize="20dp"
+            android:textColor="@color/forgot"></TextView>
+
+        <TextView
+            android:id="@+id/registrationTextView"
+            android:layout_width="351dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="150dp"
+            android:layout_marginEnd="150dp"
+            android:layout_marginBottom="100dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:text="Not a member? Get Registered to be a Member Now!"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"></TextView>
+
+    </LinearLayout>
+
+</LinearLayout>

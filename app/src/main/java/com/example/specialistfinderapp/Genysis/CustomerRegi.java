@@ -1,0 +1,134 @@
+package com.example.specialistfinderapp.Genysis;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Patterns;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.example.specialistfinderapp.R;
+import com.example.specialistfinderapp.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+
+public class CustomerRegi extends AppCompatActivity {
+    //Variable Declaration
+    Button register, back;
+    EditText fname, lname, email,phone, password, confPassword;
+    AwesomeValidation awesomeValidation;
+    private FirebaseAuth mAuth; //declaration of firebase
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_customer_regi);
+
+        //Variable Decalaration
+        register= findViewById(R.id.register);
+        back= findViewById(R.id.back);
+        fname= findViewById(R.id.fname);
+        lname= findViewById(R.id.lname);
+        email= findViewById(R.id.email);
+        phone= findViewById(R.id.phoneNo);
+        password= findViewById(R.id.password);
+        confPassword= findViewById(R.id.confPassword);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+        //Validate the confirmation of fields
+        String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
+        awesomeValidation.addValidation(CustomerRegi.this, R.id.fname, "[a-zA-Z\\s]+", R.string.fnameerr);
+        awesomeValidation.addValidation(CustomerRegi.this, R.id.lname, "[a-zA-Z\\s]+", R.string.lnameerr);
+        //Validation of email
+        awesomeValidation.addValidation(CustomerRegi.this, R.id.email, Patterns.EMAIL_ADDRESS, R.string.emailerr);
+        awesomeValidation.addValidation(CustomerRegi.this, R.id.phoneNo, RegexTemplate.TELEPHONE, R.string.phoneerr);
+        awesomeValidation.addValidation(CustomerRegi.this, R.id.password, regexPassword, R.string.passerr);
+        awesomeValidation.addValidation(CustomerRegi.this, R.id.confPassword, R.id.password, R.string.cnfpasserr);
+
+        //Set onClickListener of the login-button
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Authenticating variables
+                final String cFName = fname.getText().toString();
+                final String cLName = lname.getText().toString();
+                final String cEmail = email.getText().toString();
+                final String cPhone = phone.getText().toString();
+                final String cPassword = password.getText().toString();
+                String cConfPassword = confPassword.getText().toString();
+
+                //If validations are met-begin data authentication
+                if(awesomeValidation.validate()){
+                    //Authenticating section
+                    mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
+                            .addOnCompleteListener(CustomerRegi.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(!task.isSuccessful()){
+                                        Toast.makeText(CustomerRegi.this, ("Registration Failure! Try Again..."), Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        //If successful print
+                                        Toast.makeText(CustomerRegi.this, "Registration Success!", Toast.LENGTH_SHORT).show();
+
+
+                                        //Send data to db
+                                        User user = new User(
+                                                cFName,
+                                                cLName,
+                                                cEmail,
+                                                cPhone
+                                        );
+                                        FirebaseDatabase.getInstance().getReference("Users").child("Customers").setValue(user);
+
+                                        //Move to next frame
+                                        Intent intent = new Intent(CustomerRegi.this, CustomerLogin.class);
+                                        startActivity(intent);
+                                        finish();
+                                        return;
+                                    }
+                                }//End of onComplete
+                            });//End of addOnComplete
+
+                }else{
+                    Toast.makeText(CustomerRegi.this, "O Ja ERROR MR!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //Set onClickListener of the register
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomerRegi.this, CustomerLogin.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(mAuth.getCurrentUser() != null){
+            //Handle already logged in user
+
+        }
+    }
+}
