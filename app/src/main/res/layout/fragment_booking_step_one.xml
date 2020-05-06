@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_salon"
+        android:id="@+id/recycler_hospital"
         android:layout_marginTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
