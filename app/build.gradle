@@ -69,6 +69,8 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.0'
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
 
     //Payment Form
     implementation 'com.braintreepayments:card-form:4.2.0'

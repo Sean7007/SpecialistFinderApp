@@ -7,7 +7,7 @@
     android:padding="8dp">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_barber"
+        android:id="@+id/recycler_doctor"
         android:layout_marginTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

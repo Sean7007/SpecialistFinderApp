@@ -2,6 +2,7 @@ package com.example.specialistfinderapp.CustomerFragments.AppointmentFragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.specialistfinderapp.Adapter.MyHospitalAdapter;
@@ -17,6 +19,8 @@ import com.example.specialistfinderapp.Interface.IAllHospitalLoadListener;
 import com.example.specialistfinderapp.Interface.IBranchLoadListener;
 import com.example.specialistfinderapp.Model.Hospital;
 import com.example.specialistfinderapp.R;
+import com.example.specialistfinderapp.util.Common;
+import com.example.specialistfinderapp.util.SpacesItemDecoration;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -48,7 +52,7 @@ public class BookingStep1Fragment extends Fragment implements IAllHospitalLoadLi
     RecyclerView recycler_hospital;
 
     Unbinder unbinder;
-    AlertDialog alertDialog;
+     AlertDialog dialog;
 
     static BookingStep1Fragment instance;
 
@@ -66,7 +70,7 @@ public class BookingStep1Fragment extends Fragment implements IAllHospitalLoadLi
         iAllHospitalLoadListener = this;
         iBranchLoadListener = this;
 
-        alertDialog = new SpotsDialog.Builder().setContext(getActivity()).build();
+         dialog = new SpotsDialog.Builder().setContext(getActivity()).setCancelable(false).build();
 
     }
 
@@ -77,7 +81,7 @@ public class BookingStep1Fragment extends Fragment implements IAllHospitalLoadLi
         View itemView = inflater.inflate(R.layout.fragment_booking_step_one, container, false);
         unbinder = ButterKnife.bind(this,itemView);
 
-        initView()
+        initView();
         loadAllHospital();
         return itemView;
     }
@@ -124,7 +128,9 @@ public class BookingStep1Fragment extends Fragment implements IAllHospitalLoadLi
     }
 
     private void loadBranchOfCity(String cityName) {
-        alertDialog.show();
+        dialog.show();
+
+        Common.city = cityName;
 
         branchRef = FirebaseFirestore.getInstance()
               .collection("AllHospitals")
@@ -135,9 +141,14 @@ public class BookingStep1Fragment extends Fragment implements IAllHospitalLoadLi
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<Hospital> list = new ArrayList<>();
                 if(task.isSuccessful()){
-                    for (QueryDocumentSnapshot documentSnapshot: task.getResult())
-                        list.add(documentSnapshot.toObject(Hospital.class));
+                    for (QueryDocumentSnapshot documentSnapshot: task.getResult()) {
+                        Hospital hospital = documentSnapshot.toObject(Hospital.class);
+                        hospital.setHospitalId(documentSnapshot.getId());
+                        list.add(hospital);
+
+                    }
                     iBranchLoadListener.onBranchLoadSuccess(list);
+
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -155,17 +166,17 @@ public class BookingStep1Fragment extends Fragment implements IAllHospitalLoadLi
     }
 
     @Override
-    public void onBranchLoadSuccess(List<Hospital> hospitalListList) {
-        MyHospitalAdapter adapter = new MyHospitalAdapter(getActivity(), hospitalListList);
+    public void onBranchLoadSuccess(List<Hospital> hospitalList) {
+        MyHospitalAdapter adapter = new MyHospitalAdapter(getActivity(), hospitalList);
         recycler_hospital.setAdapter(adapter);
         recycler_hospital.setVisibility(View.VISIBLE);
 
-        alertDialog.dismiss();
+        dialog.dismiss();
     }
 
     @Override
     public void onBranchLoadFailed(String message) {
       Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-      alertDialog.dismiss();
+        dialog.dismiss();
     }
 }

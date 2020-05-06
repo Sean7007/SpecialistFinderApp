@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 
+import com.example.specialistfinderapp.Model.Hospital;
 import com.example.specialistfinderapp.R;
 import com.example.specialistfinderapp.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,12 +39,13 @@ import java.util.Map;
 
 public class Common {
     public static final String KEY_ENALBE_BUTTON_NEXT = "ENABLE_BUTTON_NEXT";
-    public static final String KEY_SALON_STORE = "SALON_SAVE";
-    public static final String KEY_BARBER_LOAD_DONE = "BARBER_LOAD_DONE";
+    public static final String KEY_HOSPITAL_STORE = "HOSPITAL_SAVE";
+    public static final String KEY_DOCTOR_LOAD_DONE = "DOCTOR_LOAD_DONE";
     public static final String KEY_DISPLAY_TIME_SLOT = "DISPLAY_TIME_SLOT";
     public static final String KEY_STEP = "STEP";
     public static final String KEY_BARBER_SELECTED = "BARBER_SELECTED";
     public static final int TIME_SLOT_TOTAL = 20;
+    public static Hospital currentHospital;
     public static final Object DISABLE_TAG = "DISABLE";
     public static final String KEY_TIME_SLOT = "TIME_SLOT";
     public static final String KEY_CONFIRM_BOOKING = "CONFIRM_BOOKING" ;
