@@ -64,8 +64,9 @@ public class MyHospitalAdapter extends RecyclerView.Adapter<MyHospitalAdapter.My
                        .getColor(android.R.color.holo_orange_dark));
 
                        //Send Broadcast to tell Booking Activity enable Button next
-                       Intent intent = new Intent(Common.KEY_ENALBE_BUTTON_NEXT);
+                       Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
                        intent.putExtra(Common.KEY_HOSPITAL_STORE,hospitalList.get(pos));
+                       intent.putExtra(Common.KEY_STEP, 1 );
                        localBroadcastManager.sendBroadcast(intent);
                    }
                }

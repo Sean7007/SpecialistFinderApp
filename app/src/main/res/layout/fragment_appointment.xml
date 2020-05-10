@@ -67,6 +67,7 @@
                     android:layout_height="70dp"/>
                 <TextView
                     android:text="Booking"
+                    android:fontFamily="@font/bellerose"
                     android:layout_gravity="center_horizontal"
                     android:textSize="@dimen/textCardSize"
                     android:layout_width="wrap_content"
@@ -95,6 +96,7 @@
                     android:layout_height="70dp"/>
                 <TextView
                     android:text="History"
+                    android:fontFamily="@font/bellerose"
                     android:layout_gravity="center_horizontal"
                     android:textSize="@dimen/textCardSize"
                     android:layout_width="wrap_content"
@@ -122,6 +124,7 @@
                     android:layout_height="70dp"/>
                 <TextView
                     android:text="Notification"
+                    android:fontFamily="@font/bellerose"
                     android:layout_gravity="center_horizontal"
                     android:textSize="@dimen/textCardSize"
                     android:layout_width="wrap_content"

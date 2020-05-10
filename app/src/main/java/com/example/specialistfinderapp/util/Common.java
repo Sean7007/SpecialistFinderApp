@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 
+import com.example.specialistfinderapp.Model.Doctor;
 import com.example.specialistfinderapp.Model.Hospital;
 import com.example.specialistfinderapp.R;
 import com.example.specialistfinderapp.User;
@@ -38,12 +39,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Common {
-    public static final String KEY_ENALBE_BUTTON_NEXT = "ENABLE_BUTTON_NEXT";
+    public static final String KEY_ENABLE_BUTTON_NEXT = "ENABLE_BUTTON_NEXT";
     public static final String KEY_HOSPITAL_STORE = "HOSPITAL_SAVE";
     public static final String KEY_DOCTOR_LOAD_DONE = "DOCTOR_LOAD_DONE";
     public static final String KEY_DISPLAY_TIME_SLOT = "DISPLAY_TIME_SLOT";
     public static final String KEY_STEP = "STEP";
-    public static final String KEY_BARBER_SELECTED = "BARBER_SELECTED";
+    public static final String KEY_DOCTOR_SELECTED = "DOCTOR_SELECTED";
     public static final int TIME_SLOT_TOTAL = 20;
     public static Hospital currentHospital;
     public static final Object DISABLE_TAG = "DISABLE";
@@ -66,10 +67,10 @@ public class Common {
    // public static Salon currentSalon ;
     public static int step = 0;
     public static String city = "";
-   // public static Barber currentBarber;
+    public static Doctor currentDoctor;
     public static int currentTimeSlot = -1;
     public static Calendar bookingDate = Calendar.getInstance();
-    public static SimpleDateFormat simpleFormatDate = new SimpleDateFormat("dd_MM_yyyy"); //ONly Use when need format Key
+    public static SimpleDateFormat simpleFormatDate = new SimpleDateFormat("dd_MM_yyyy"); //Only Use when need format Key
    // public static BookingInformation currentBooking;
     public static String currentBookingId="";
 

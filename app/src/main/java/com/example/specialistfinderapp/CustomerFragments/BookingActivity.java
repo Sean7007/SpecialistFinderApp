@@ -63,15 +63,38 @@ public class BookingActivity extends AppCompatActivity {
     }
     @OnClick(R.id.btn_next_step)
     void nextClick(){
-       if(Common.step < 3 || Common.step == 0){
+       if(Common.step < 3 || Common.step == 0)
+       {
            Common.step++; //increase
-           if(Common.step == 1); //After choosing hospital
+           if(Common.step == 1) //After choosing hospital
            {
-               if(Common.currentHospital != null)
+               if (Common.currentHospital != null)
                    loadDoctorByHospital(Common.currentHospital.getHospitalId());
+           }
+           else if(Common.step == 2)//Pick time slot
+           {
+               if(Common.currentDoctor != null)
+                   loadTimeSlotOfDoctor(Common.currentDoctor.getDoctorId());
+           }
+           else if(Common.step == 3)//Pick time slot
+           {
+               if(Common.currentTimeSlot != -1)
+                   confirmBooking();
            }
            viewPager.setCurrentItem(Common.step);
        }
+    }
+
+    private void confirmBooking() {
+        //Send broadcast to fragment step four
+        Intent intent = new Intent(Common.KEY_CONFIRM_BOOKING);
+        localBroadcastManager.sendBroadcast(intent);
+    }
+
+    private void loadTimeSlotOfDoctor(String doctorId) {
+        //Send Local Broadcast to Fragment step 3
+        Intent intent = new Intent(Common.KEY_DISPLAY_TIME_SLOT);
+        localBroadcastManager.sendBroadcast(intent);
     }
 
     private void loadDoctorByHospital(String hospitalId) {
@@ -123,7 +146,15 @@ public class BookingActivity extends AppCompatActivity {
     private BroadcastReceiver buttonNextReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            int step = intent.getIntExtra(Common.KEY_STEP, 0);
+            if(step == 1)
             Common.currentHospital = intent.getParcelableExtra(Common.KEY_HOSPITAL_STORE);
+            else if (step == 2)
+                Common.currentDoctor = intent.getParcelableExtra(Common.KEY_DOCTOR_SELECTED);
+            else if (step == 3)
+                Common.currentTimeSlot = intent.getIntExtra(Common.KEY_TIME_SLOT, -1);
+
             btn_next_step.setEnabled(true);
             setColorButton();
         }
@@ -137,7 +168,7 @@ public class BookingActivity extends AppCompatActivity {
         dialog = new SpotsDialog.Builder().setContext(this).setCancelable(false).build();
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
-        localBroadcastManager.registerReceiver(buttonNextReceiver, new IntentFilter(Common.KEY_ENALBE_BUTTON_NEXT));
+        localBroadcastManager.registerReceiver(buttonNextReceiver, new IntentFilter(Common.KEY_ENABLE_BUTTON_NEXT));
 
         setupStepView();
         setColorButton();
@@ -160,6 +191,9 @@ public class BookingActivity extends AppCompatActivity {
                     btn_previous_step.setEnabled(false);
                 else
                     btn_previous_step.setEnabled(true);
+
+                //Set disable button
+                btn_next_step.setEnabled(false);
                 setColorButton();
 
             }
