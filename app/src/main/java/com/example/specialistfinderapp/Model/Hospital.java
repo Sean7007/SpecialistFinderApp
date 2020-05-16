@@ -8,6 +8,7 @@ public class Hospital implements Parcelable {
 
     //Constructor
     public Hospital() {
+
     }
 
     protected Hospital(Parcel in) {

@@ -64,6 +64,9 @@ android {
         implementation 'com.github.glomadrian:MaterialAnimatedSwitch:1.1@aar'
         implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+        implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+
+
         implementation 'androidx.multidex:multidex:2.0.1'
 
         //Appointment feature

@@ -32,13 +32,13 @@ public class CustomerAppointmentFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private static CustomerAppointmentFragment INSTANCE =null;
     View view;
+    CardView card_view_booking;
 
-    @OnClick(R.id.card_view_booking)
+
+    /*@OnClick(R.id.card_view_booking)
             void booking(){
-        startActivity(new Intent(getActivity(), BookingActivity.class));
+        startActivity(new Intent(getActivity(), BookingActivity.class)); }*/
 
-    }
-    CardView card_booking_info;
     //Constructor
     public CustomerAppointmentFragment() {
         // Required empty public constructor
@@ -67,6 +67,18 @@ public class CustomerAppointmentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_appointment, container, false);
+
+        card_view_booking = view.findViewById(R.id.card_view_booking);
+        card_view_booking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), BookingActivity.class);
+                getActivity().startActivity(intent);
+                return;
+            }
+        });
+
+
         return view;
     }
 

@@ -25,7 +25,7 @@ public class NonSwipeViewPager extends ViewPager {
     }
 
     @Override
-    public boolean onInterceptHoverEvent(MotionEvent event) {
+    public boolean onInterceptTouchEvent(MotionEvent event) {
         return false;
     }
 

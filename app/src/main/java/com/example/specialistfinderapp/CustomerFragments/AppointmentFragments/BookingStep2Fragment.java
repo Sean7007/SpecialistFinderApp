@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.specialistfinderapp.Adapter.MyDoctorAdapter;
@@ -20,8 +22,12 @@ import com.example.specialistfinderapp.Model.Doctor;
 import com.example.specialistfinderapp.R;
 import com.example.specialistfinderapp.util.Common;
 import com.example.specialistfinderapp.util.SpacesItemDecoration;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import com.google.common.io.LineReader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +37,8 @@ public class BookingStep2Fragment extends Fragment {
     //Variables
     Unbinder unbinder;
     LocalBroadcastManager localBroadcastManager;
+    private MyDoctorAdapter adapter;
+    List<Doctor> doctorList; //Not sure
 
     @BindView(R.id.recycler_doctor)
     RecyclerView recycler_doctor;
@@ -45,6 +53,27 @@ public class BookingStep2Fragment extends Fragment {
             recycler_doctor.setAdapter(adapter);
         }
     };
+
+    //EVENT BUS START
+   /* @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void setDoctorAdapter(DoctorDoneEvent event)
+    {
+        MyDoctorAdapter adapter = new MyDoctorAdapter(getContext(), event.getDoctorList());
+        recycler_doctor.setAdapter(adapter);
+    }*/
+
 
     static BookingStep2Fragment instance;
 
@@ -62,7 +91,7 @@ public class BookingStep2Fragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
+      public void onDestroy() {
         localBroadcastManager.unregisterReceiver(doctorDoneReceiver);
         super.onDestroy();
     }
@@ -72,14 +101,30 @@ public class BookingStep2Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View itemView = inflater.inflate(R.layout.fragment_booking_step_two, container, false);
-        unbinder = ButterKnife.bind(this, itemView);
+        unbinder = ButterKnife.bind(this,itemView);
+
+        doctorList = new ArrayList<>();
+
+        recycler_doctor = (RecyclerView) itemView.findViewById(R.id.recycler_doctor);
+
         initView();
         return itemView;
     }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
     private void initView() {
+
         recycler_doctor.setHasFixedSize(true);
         recycler_doctor.setLayoutManager(new GridLayoutManager(getActivity(),2));
         recycler_doctor.addItemDecoration(new SpacesItemDecoration(4));
+        recycler_doctor.setItemAnimator(new DefaultItemAnimator());
+
+        //Your adapter initialization here
+        adapter = new MyDoctorAdapter(getActivity(), doctorList);
+        recycler_doctor.setAdapter(adapter);
     }
+
 }

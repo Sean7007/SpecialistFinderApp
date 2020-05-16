@@ -1,6 +1,7 @@
 package com.example.specialistfinderapp.CustomerFragments.AppointmentFragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.specialistfinderapp.Adapter.MyHospitalAdapter;
+import com.example.specialistfinderapp.CustomerFragments.BookingActivity;
 import com.example.specialistfinderapp.Interface.IAllHospitalLoadListener;
 import com.example.specialistfinderapp.Interface.IBranchLoadListener;
 import com.example.specialistfinderapp.Model.Hospital;
@@ -79,6 +81,9 @@ public class BookingStep1Fragment extends Fragment implements IAllHospitalLoadLi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View itemView = inflater.inflate(R.layout.fragment_booking_step_one, container, false);
+        spinner = itemView.findViewById(R.id.spinner);
+        recycler_hospital = itemView.findViewById(R.id.recycler_hospital);
+
         unbinder = ButterKnife.bind(this,itemView);
 
         initView();

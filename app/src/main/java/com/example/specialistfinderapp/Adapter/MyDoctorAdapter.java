@@ -58,6 +58,7 @@ public class MyDoctorAdapter extends RecyclerView.Adapter<MyDoctorAdapter.MyView
                    cardView.setCardBackgroundColor(context.getResources()
                            .getColor(android.R.color.white));
                }
+
                //Set background for choice
                holder.card_doctor.setCardBackgroundColor(
                        context.getResources()
@@ -103,7 +104,7 @@ public class MyDoctorAdapter extends RecyclerView.Adapter<MyDoctorAdapter.MyView
 
         @Override
         public void onClick(View v) {
-            this.iRecyclerItemSelectedListener = iRecyclerItemSelectedListener;
+            iRecyclerItemSelectedListener.onItemSelectedListener(v, getAdapterPosition());
         }
     }
 }

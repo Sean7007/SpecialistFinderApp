@@ -82,7 +82,7 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
                 .document(Common.city)
                 .collection("Branch")
                 .document(Common.currentHospital.getHospitalId())
-                .collection("Doctor")
+                .collection("Doctors")
                 .document(Common.currentDoctor.getDoctorId());
 
         //Get Information of this doctor
@@ -100,7 +100,7 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
                               .document(Common.city)
                               .collection("Branch")
                               .document(Common.currentHospital.getHospitalId())
-                              .collection("Doctor")
+                              .collection("Doctors")
                               .document(Common.currentDoctor.getDoctorId())
                               .collection(bookDate);
 

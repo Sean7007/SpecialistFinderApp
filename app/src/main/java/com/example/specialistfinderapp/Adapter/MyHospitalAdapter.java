@@ -51,8 +51,7 @@ public class MyHospitalAdapter extends RecyclerView.Adapter<MyHospitalAdapter.My
        if(!cardViewList.contains(holder.card_hospital))
            cardViewList.add(holder.card_hospital);
 
-       holder.setiRecyclerItemSelectedListener
-               (new IRecyclerItemSelectedListener() {
+       holder.setiRecyclerItemSelectedListener(new IRecyclerItemSelectedListener() {
                    @Override
                    public void onItemSelectedListener(View view, int pos) {
                        for(CardView cardView: cardViewList)

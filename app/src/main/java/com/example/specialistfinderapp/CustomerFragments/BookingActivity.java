@@ -3,6 +3,8 @@ package com.example.specialistfinderapp.CustomerFragments;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlertDialog;
@@ -12,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -61,6 +64,7 @@ public class BookingActivity extends AppCompatActivity {
             viewPager.setCurrentItem(Common.step);
         }
     }
+
     @OnClick(R.id.btn_next_step)
     void nextClick(){
        if(Common.step < 3 || Common.step == 0)
@@ -101,13 +105,13 @@ public class BookingActivity extends AppCompatActivity {
      dialog.show();
 
      //Now, select all doctor of Hospital
-        if(TextUtils.isEmpty(Common.city)) {
+        if(!TextUtils.isEmpty(Common.city)) {
             doctorRef = FirebaseFirestore.getInstance()
                     .collection("AllHospitals")
                     .document(Common.city)
                     .collection("Branch")
                     .document(hospitalId)
-                    .collection("Doctor");
+                    .collection("Doctors");
             doctorRef.get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -120,6 +124,7 @@ public class BookingActivity extends AppCompatActivity {
 
                               doctors.add(doctor);
                           }
+
                           //Send Broadcast to BookingStep2Fragment to load recycler
                             Intent intent = new Intent(Common.KEY_DOCTOR_LOAD_DONE);
                             intent.putParcelableArrayListExtra(Common.KEY_DOCTOR_LOAD_DONE, doctors);
@@ -165,10 +170,52 @@ public class BookingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking);
         ButterKnife.bind(BookingActivity.this);
 
+        btn_previous_step = findViewById(R.id.btn_previous_step);
+        btn_next_step = findViewById(R.id.btn_next_step);
+        viewPager = findViewById(R.id.booking_view_pager);
+        stepView = findViewById(R.id.step_view);
+
         dialog = new SpotsDialog.Builder().setContext(this).setCancelable(false).build();
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
         localBroadcastManager.registerReceiver(buttonNextReceiver, new IntentFilter(Common.KEY_ENABLE_BUTTON_NEXT));
+
+        btn_previous_step.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Common.step == 3 || Common.step > 0){
+                    Common.step--;
+                    viewPager.setCurrentItem(Common.step);
+                }
+            }
+        });
+
+        btn_next_step.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Common.step < 3 || Common.step == 0)
+                {
+                    Common.step++; //increase
+                    if(Common.step == 1) //After choosing hospital
+                    {
+                        if (Common.currentHospital != null)
+                            loadDoctorByHospital(Common.currentHospital.getHospitalId());
+                    }
+                    else if(Common.step == 2)//Pick time slot
+                    {
+                        if(Common.currentDoctor != null)
+                            loadTimeSlotOfDoctor(Common.currentDoctor.getDoctorId());
+                    }
+                    else if(Common.step == 3)//Pick time slot
+                    {
+                        if(Common.currentTimeSlot != -1)
+                            confirmBooking();
+                    }
+                    viewPager.setCurrentItem(Common.step);
+                }
+
+            }
+        });
 
         setupStepView();
         setColorButton();
