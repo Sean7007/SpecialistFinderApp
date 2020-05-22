@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 
+import com.example.specialistfinderapp.Model.BookingInformation;
 import com.example.specialistfinderapp.Model.Doctor;
 import com.example.specialistfinderapp.Model.Hospital;
 import com.example.specialistfinderapp.R;
@@ -37,8 +38,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Formatter;
 
 public class Common {
+    public static final String STATE_KEY = "STATE" ;
+    public static final String HOSPITAL_KEY = "HOSPITAL" ;
+    public static final String DOCTOR_KEY = "DOCTOR";
+    //Specialist
+    public static String state_name="";
+
     public static final String KEY_ENABLE_BUTTON_NEXT = "ENABLE_BUTTON_NEXT";
     public static final String KEY_HOSPITAL_STORE = "HOSPITAL_SAVE";
     public static final String KEY_DOCTOR_LOAD_DONE = "DOCTOR_LOAD_DONE";
@@ -64,15 +72,17 @@ public class Common {
 
     public static String IS_LOGIN = "IsLogin";
     public static User currentUser;
-   // public static Salon currentSalon ;
     public static int step = 0;
     public static String city = "";
     public static Doctor currentDoctor;
     public static int currentTimeSlot = -1;
     public static Calendar bookingDate = Calendar.getInstance();
     public static SimpleDateFormat simpleFormatDate = new SimpleDateFormat("dd_MM_yyyy"); //Only Use when need format Key
-   // public static BookingInformation currentBooking;
     public static String currentBookingId="";
+    public static BookingInformation currentBooking;
+    public static Hospital selectedHospital;
+    public static SimpleDateFormat simpleDateFormat =  new SimpleDateFormat("dd_MM_yyyy"); //Only Use when need format Key;
+
 
     public static String convertTimeSlotToString(int slot) {
         switch (slot)
@@ -121,8 +131,13 @@ public class Common {
                 return "Closed";
         }
     }
-/*
-    public static String convertTimeSlotToStringKey(Timestamp timestamp) {
+    public static String convertTimeStampToStringKey(com.google.firebase.Timestamp timestamp) {
+        Date date = timestamp.toDate();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
+        return simpleDateFormat.format(date);
+    }
+
+    /*public static String convertTimeSlotToString(Timestamp timestamp) {
         Date date = timestamp.toDate();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
         return simpleDateFormat.format(date);

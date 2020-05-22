@@ -63,8 +63,8 @@ public class SpecialistHome extends AppCompatActivity {
         TabLayout tabLayout =  findViewById(R.id.tabLayout_id);
         ViewPager viewPager =  findViewById(R.id.viewPager_id);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        profile_image = findViewById(R.id.profile_Image);
-        cFname  = findViewById(R.id.cFname);
+        //profile_image = findViewById(R.id.profile_Image);
+        //cFname  = findViewById(R.id.cFname);
 
         /*Toolbar toolbar1 = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar1);

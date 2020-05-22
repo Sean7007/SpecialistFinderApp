@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:backgroundTint="@color/background"
+    tools:context=".Genysis.SpecialistLogin">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="75dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+id/logo"
+            android:text="SPECIALIST'S LOGIN"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="20dp"
+            android:textAlignment="gravity"
+            android:layout_marginBottom="30dp"
+            ></TextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_state"
+            android:layout_below="@+id/logo"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:textColor="@color/login_btn"
+            android:id="@+id/back"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="30dp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

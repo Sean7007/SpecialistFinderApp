@@ -27,6 +27,7 @@ import com.example.specialistfinderapp.util.SpacesItemDecoration;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.eventbus.Subscribe;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -55,13 +56,12 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
 
     Unbinder unbinder;
     LocalBroadcastManager localBroadcastManager;
-    Calendar selected_date;
 
     @BindView(R.id.recycler_time_slot)
     RecyclerView recycler_time_slot;
     @BindView(R.id.calendarView)
     HorizontalCalendarView calendarView;
-    SimpleDateFormat simpleDateFormat;
+    SimpleDateFormat simpleFormatDate;
 
     BroadcastReceiver displayTimeSlot = new BroadcastReceiver() {
         @Override
@@ -69,9 +69,10 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
            Calendar date = Calendar.getInstance();
            date.add(Calendar.DATE, 0); //Add current date
             loadAvailableTimeSlotOfDoctor(Common.currentDoctor.getDoctorId(),
-                    simpleDateFormat.format(date.getTime()));
+                    simpleFormatDate.format(date.getTime()));
         }
     };
+
 
     private void loadAvailableTimeSlotOfDoctor(String doctorId, final String bookDate) {
         dialog.show();
@@ -89,46 +90,46 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
         doctorDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-              if(task.isSuccessful()) {
-                  DocumentSnapshot documentSnapshot = task.getResult();
-                  if (documentSnapshot.exists()) //if barber available
-                  {
-                      //Get information of booking
-                      //If not created, return empty
-                      CollectionReference date = FirebaseFirestore.getInstance()
-                              .collection("AllHospitals")
-                              .document(Common.city)
-                              .collection("Branch")
-                              .document(Common.currentHospital.getHospitalId())
-                              .collection("Doctors")
-                              .document(Common.currentDoctor.getDoctorId())
-                              .collection(bookDate);
+                if(task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {//if doctor available
 
-                      date.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                          @Override
-                          public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                              if (task.isSuccessful()) {
-                                  QuerySnapshot querySnapshot = task.getResult();
-                                  if (querySnapshot.isEmpty()) //If there is no appointment
-                                      iTimeSlotLoadListener.onTimeSlotLoadEmpty();
-                                  else {
-                                      //If have an appointment
-                                      List<TimeSlot> timeSlots = new ArrayList<>();
-                                      for (QueryDocumentSnapshot documentSnapshot1 : task.getResult())
-                                          timeSlots.add(documentSnapshot1.toObject(TimeSlot.class));
-                                      iTimeSlotLoadListener.onTimeSlotLoadSuccess(timeSlots);
-                                  }
-                              }
-                          }
-                      }).addOnFailureListener(new OnFailureListener() {
-                          @Override
-                          public void onFailure(@NonNull Exception e) {
-                              iTimeSlotLoadListener.onTimeSlotLoadFailed(e.getMessage());
+                        //Get information of booking
+                        //If not created, return empty
+                        CollectionReference date = FirebaseFirestore.getInstance()
+                                .collection("AllHospitals")
+                                .document(Common.city)
+                                .collection("Branch")
+                                .document(Common.currentHospital.getHospitalId())
+                                .collection("Doctors")
+                                .document(Common.currentDoctor.getDoctorId())
+                                .collection(bookDate);
 
-                          }
-                      });
-                  }
-              }
+                        date.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    QuerySnapshot querySnapshot = task.getResult();
+                                    if (querySnapshot.isEmpty())  //If there is no appointment
+                                        iTimeSlotLoadListener.onTimeSlotLoadEmpty();
+
+                                    else {
+                                        //If have an appointment
+                                        List<TimeSlot> timeSlots = new ArrayList<>();
+                                        for (QueryDocumentSnapshot document : task.getResult())
+                                            timeSlots.add(document.toObject(TimeSlot.class));
+                                        iTimeSlotLoadListener.onTimeSlotLoadSuccess(timeSlots);
+                                    }
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                iTimeSlotLoadListener.onTimeSlotLoadFailed(e.getMessage());
+                            }
+                        });
+                    }
+                }
             }
         });
     }
@@ -148,9 +149,8 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
         localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
         localBroadcastManager.registerReceiver(displayTimeSlot, new IntentFilter(Common.KEY_DISPLAY_TIME_SLOT));
 
-        simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy"); //05_07_2020 (this is key)
+        simpleFormatDate = new SimpleDateFormat("dd_MM_yyyy"); //05_07_2020 (this is key)
         dialog = new SpotsDialog.Builder().setContext(getContext()).setCancelable(false).build();
-
     }
 
     @Override
@@ -159,9 +159,10 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
         super.onDestroy();
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater,container, savedInstanceState);
         // Inflate the layout for this fragment
         View itemView = inflater.inflate(R.layout.fragment_booking_step_three, container, false);
         unbinder = ButterKnife.bind(this, itemView);
@@ -179,7 +180,7 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.DATE, 0);
         Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.DATE, 2);
+        endDate.add(Calendar.DATE, 3);
 
         HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(itemView, R.id.calendarView)
                 .range(startDate, endDate)
@@ -193,7 +194,7 @@ public class BookingStep3Fragment extends Fragment implements ITimeSlotLoadListe
                 if(Common.bookingDate.getTimeInMillis() != date.getTimeInMillis()){
                     Common.bookingDate = date; //This code will not load again if you selected new day same with day
                     loadAvailableTimeSlotOfDoctor(Common.currentDoctor.getDoctorId(),
-                            simpleDateFormat.format(date.getTime()));
+                            simpleFormatDate.format(date.getTime()));
                 }
             }
         });

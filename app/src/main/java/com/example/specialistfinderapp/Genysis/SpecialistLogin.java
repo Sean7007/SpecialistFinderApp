@@ -2,9 +2,12 @@ package com.example.specialistfinderapp.Genysis;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +15,7 @@ import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -33,7 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 public class SpecialistLogin extends AppCompatActivity {
     //Variable Declaration
     Button login, back;
-    EditText email, password;
+    private android.widget.EditText email, password;
+    AppCompatCheckBox checkBox;
     TextView register;
     TextView forgot;
     AwesomeValidation awesomeValidation;
@@ -48,6 +53,7 @@ public class SpecialistLogin extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance(); //Retrieves state of Fire-base
         login = findViewById(R.id.login);
         back = findViewById(R.id.back);
+        checkBox = findViewById(R.id.checkbox);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         register = findViewById(R.id.registrationTextView);
@@ -143,6 +149,20 @@ public class SpecialistLogin extends AppCompatActivity {
                     return;
                 }
             });
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (!isChecked) {
+                    // show password
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    // hide password
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                }
+            }
+        });
 
         }
 

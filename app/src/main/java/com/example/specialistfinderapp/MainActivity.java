@@ -1,5 +1,6 @@
 package com.example.specialistfinderapp;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,12 +20,22 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.specialistfinderapp.Genysis.CustomerLogin;
+import com.example.specialistfinderapp.Genysis.SpecialistHome2;
 import com.example.specialistfinderapp.Genysis.SpecialistLogin;
 import com.example.specialistfinderapp.util.Common;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.util.List;
 
 import static com.example.specialistfinderapp.util.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.specialistfinderapp.util.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -36,27 +47,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean mLocationPermissionGranted = false;
     private static final String TAG = "MainActivity";
 
-    //User updates info
-    DatabaseReference userRef;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Button Casting
         customer = findViewById(R.id.customer);
         specialist = findViewById(R.id.specialist);
-
-        //Not sure
-       /* userRef = FirebaseDatabase.getInstance().getReference("User");
-        if(getIntent() != null){
-            boolean isLogin = getIntent().getBooleanExtra(Common.IS_LOGIN,false);
-            if(isLogin){
-
-            }
-        }*/
-
 
         //Set onClickListener of the buttons on Customer screen
         customer.setOnClickListener(new View.OnClickListener() {
@@ -72,13 +69,38 @@ public class MainActivity extends AppCompatActivity {
         specialist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SpecialistLogin.class);
+                Intent intent = new Intent(MainActivity.this, SpecialistHome2.class);
                 startActivity(intent);
                 finish();
             }
         });
+
+
+        //========================APPOINTMENT=================================================================================//
+        Dexter.withActivity(this)
+                .withPermissions(new String[]{
+                        Manifest.permission.READ_CALENDAR,
+                        Manifest.permission.WRITE_CALENDAR
+                }).withListener(new MultiplePermissionsListener(){
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report){
+
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+
+            }
+
+        }).check();
+        //=======================END OF APPOINTMENT============================================================================//
+
     }
 
+
+
+
+   //======================================MAP CODE==============================================================================//
     private boolean checkMapServices() {
         if (isServicesOK()) {
             if (isMapsEnabled()) {
@@ -88,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    //METHODS FOR MAPS
     //tells user there are no gps permissions allowed
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

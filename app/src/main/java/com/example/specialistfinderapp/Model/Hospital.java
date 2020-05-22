@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Hospital implements Parcelable {
-    public String name, address,websites, phone, openHours, hospitalId;
+    public String name, address,hospitalId,websites, phone, openHours;
 
     //Constructor
     public Hospital() {

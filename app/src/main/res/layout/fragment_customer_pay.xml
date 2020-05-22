@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
+        android:fontFamily="@font/bellerose"
         android:textStyle="italic"
         android:textSize="20sp"
         android:text="There are 3 payment options for customers which is through use of bank card, My Zaka services and Orange Money."
@@ -30,6 +31,7 @@
         android:layout_marginTop="172dp"
         android:layout_marginRight="40dp"
         android:background="@color/quantum_grey"
+        android:fontFamily="@font/bellerose"
         android:text="Card"
         android:textColor="@color/quantum_black_100" />
 
@@ -41,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/card_button"
         android:layout_marginBottom="-97dp"
+        android:fontFamily="@font/bellerose"
         android:text="MyZaka"
         android:background="@color/quantum_yellow"
 
@@ -55,5 +58,6 @@
         android:layout_alignBottom="@+id/button2"
         android:layout_marginBottom="-100dp"
         android:background="@color/quantum_orange"
+        android:fontFamily="@font/bellerose"
         android:text="Orange Money" />
 </RelativeLayout>

@@ -18,6 +18,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginTop="10dp"
         android:background="@color/quantum_grey"
+        android:fontFamily="@font/bellerose"
         android:text="Pay Now!"
         android:textColor="@color/quantum_white_100"/>
 

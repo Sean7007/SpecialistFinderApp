@@ -5,6 +5,7 @@
     app:ignore="NamespaceTypo">
     <item
         android:id="@+id/logout"
+        android:fontFamily="@font/bellerose"
         android:title="Logout"
         app:showAsAction="never" />
 

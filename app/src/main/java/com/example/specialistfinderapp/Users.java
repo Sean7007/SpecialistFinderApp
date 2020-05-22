@@ -1,33 +1,51 @@
 package com.example.specialistfinderapp;
 
 public class Users {
-    private String username, imageURL;
+    private String cFName;
+    private String cLName;
+    private String cEmail;
+    private String cPhone;
 
-    //Blank Constructor
-    public Users(){}
-
-
-    //
-    public Users(String username,String imageURL){
-        this.username = username;
-        this.imageURL = imageURL;
+    public Users() {
     }
 
-
-    public String getusername() {
-        return username;
+    public Users(String cFName, String cLName, String cEmail, String cPhone) {
+        this.cFName = cFName;
+        this.cLName = cLName;
+        this.cEmail = cEmail;
+        this.cPhone = cPhone;
     }
 
-    public void setusername(String username) {
-        this.username = username;
+    public String getcFName() {
+        return cFName;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public void setcFName(String cFName) {
+        this.cFName = cFName;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public String getcLName() {
+        return cLName;
+    }
+
+    public void setcLName(String cLName) {
+        this.cLName = cLName;
+    }
+
+    public String getcEmail() {
+        return cEmail;
+    }
+
+    public void setcEmail(String cEmail) {
+        this.cEmail = cEmail;
+    }
+
+    public String getcPhone() {
+        return cPhone;
+    }
+
+    public void setcPhone(String cPhone) {
+        this.cPhone = cPhone;
     }
 
 }

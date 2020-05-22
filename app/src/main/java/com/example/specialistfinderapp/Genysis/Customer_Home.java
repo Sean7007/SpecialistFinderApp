@@ -3,9 +3,7 @@ package com.example.specialistfinderapp.Genysis;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -19,13 +17,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
 import com.example.specialistfinderapp.CustomerFragments.CustomerAppointmentFragment;
 import com.example.specialistfinderapp.CustomerFragments.CustomerChatFragment;
 import com.example.specialistfinderapp.CustomerFragments.CustomerHomeFragment1;
 import com.example.specialistfinderapp.CustomerFragments.CustomerPayFragment;
+import com.example.specialistfinderapp.CustomerFragments.CustomerUserFragment;
 import com.example.specialistfinderapp.R;
-import com.example.specialistfinderapp.User;
 import com.example.specialistfinderapp.Users;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,8 +36,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 
 public class Customer_Home extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -51,13 +46,39 @@ public class Customer_Home extends AppCompatActivity {
     FirebaseUser firebaseUser;//Fire-base User
 
     DatabaseReference reference;
-    CircleImageView profile_image;
-    TextView cFname;
+    TextView cFname, username;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_home);
+
+        //===========================================CHAT ==========================//
+        Toolbar toolbar1 = findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar1);
+        getSupportActionBar().setTitle("");
+
+
+        username = findViewById(R.id.username);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child("Customers").child(firebaseUser.getUid());
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Users user = dataSnapshot.getValue(Users.class);
+                    assert user != null;
+                 //   username.setText(user.getcEmail());
+                }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         mAuth = FirebaseAuth.getInstance();
 
         currentUser = mAuth.getCurrentUser();
@@ -66,7 +87,6 @@ public class Customer_Home extends AppCompatActivity {
         TabLayout tabLayout =  findViewById(R.id.tabLayout_id);
         ViewPager viewPager =  findViewById(R.id.viewPager_id);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        cFname = findViewById(R.id.username);
 
         setupWithViewPager(viewPager);
 
@@ -75,7 +95,8 @@ public class Customer_Home extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_appointment);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_payment_black_24dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_person_black_24dp);
+        tabLayout.getTabAt(4).setIcon(R.drawable.ic_payment_black_24dp);
 
         setSupportActionBar(toolbar);
         fragmentManager = getSupportFragmentManager();
@@ -88,6 +109,8 @@ public class Customer_Home extends AppCompatActivity {
         tabLayout.getTabAt(1).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(2).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(3).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+        tabLayout.getTabAt(4).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -107,11 +130,16 @@ public class Customer_Home extends AppCompatActivity {
         });
     }
 
+    private void showUpdateDialog(String name) {
+
+    }
+
     private void setupWithViewPager(ViewPager viewPager) {
         SectionPageAdapter sectionPageAdapter = new SectionPageAdapter(getSupportFragmentManager());
         sectionPageAdapter.addFragment(CustomerHomeFragment1.newInstance(),"Home");
-        sectionPageAdapter.addFragment(CustomerAppointmentFragment.newInstance(), "Appointment");
+        sectionPageAdapter.addFragment(CustomerAppointmentFragment.newInstance(), "Booking");
         sectionPageAdapter.addFragment(CustomerChatFragment.newInstance(), "Chat");
+        sectionPageAdapter.addFragment(CustomerUserFragment.newInstance(), "Users");
         sectionPageAdapter.addFragment(CustomerPayFragment.newInstance(), "Payment");
         viewPager.setAdapter(sectionPageAdapter);
     }

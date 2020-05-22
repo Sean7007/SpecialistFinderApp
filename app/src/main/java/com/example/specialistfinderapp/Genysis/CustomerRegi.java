@@ -16,10 +16,12 @@ import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.specialistfinderapp.R;
 import com.example.specialistfinderapp.User;
+import com.example.specialistfinderapp.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,6 +33,7 @@ public class CustomerRegi extends AppCompatActivity {
     EditText fname, lname, email,phone, password, confPassword;
     AwesomeValidation awesomeValidation;
     private FirebaseAuth mAuth; //declaration of firebase
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +68,11 @@ public class CustomerRegi extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Authenticating variables
-                final String cFName = fname.getText().toString();
-                final String cLName = lname.getText().toString();
-                final String cEmail = email.getText().toString();
-                final String cPhone = phone.getText().toString();
-                final String cPassword = password.getText().toString();
+                 String cFName = fname.getText().toString();
+                 String cLName = lname.getText().toString();
+                 String cEmail = email.getText().toString();
+                 String cPhone = phone.getText().toString();
+                 String cPassword = password.getText().toString();
                 String cConfPassword = confPassword.getText().toString();
 
                 //If validations are met-begin data authentication
@@ -84,26 +87,42 @@ public class CustomerRegi extends AppCompatActivity {
                                     }else{
                                         //If successful print
                                         Toast.makeText(CustomerRegi.this, "Registration Success!", Toast.LENGTH_SHORT).show();
+                                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                        String userid = firebaseUser.getUid();
 
+                                        reference = FirebaseDatabase.getInstance().getReference("Users").child("Customers").child(userid);
 
-                                        //Send data to db
-                                        User user = new User(
-                                                cFName,
-                                                cLName,
-                                                cEmail,
-                                                cPhone
-                                        );
+                                        HashMap<String, String> hashMap = new HashMap<>();
+                                        hashMap.put("id", userid);
+                                        hashMap.put("firstname", cFName );
+                                        hashMap.put("lastname", cLName);
+                                        hashMap.put("email", cEmail);
+                                        hashMap.put("phone", cPhone);
+
+                                        reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                              if(task.isSuccessful()){
+                                                  //Move to next frame
+                                                  Intent intent = new Intent(CustomerRegi.this, CustomerLogin.class);
+                                                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                  startActivity(intent);
+                                                  finish();
+                                                  return;
+                                              }
+                                            }
+                                        });
+                                        /*Send data to db
+                                        Users user = new Users(cFName, cLName, cEmail, cPhone);
                                         FirebaseDatabase.getInstance().getReference("Users").child("Customers").setValue(user);
-
                                         //Move to next frame
                                         Intent intent = new Intent(CustomerRegi.this, CustomerLogin.class);
                                         startActivity(intent);
                                         finish();
-                                        return;
+                                        return;*/
                                     }
-                                }//End of onComplete
+                                    }//End of onComplete
                             });//End of addOnComplete
-
                 }else{
                     Toast.makeText(CustomerRegi.this, "O Ja ERROR MR!", Toast.LENGTH_SHORT).show();
                 }

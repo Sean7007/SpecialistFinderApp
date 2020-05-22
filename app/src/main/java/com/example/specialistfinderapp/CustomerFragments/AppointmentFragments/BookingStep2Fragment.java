@@ -54,26 +54,6 @@ public class BookingStep2Fragment extends Fragment {
         }
     };
 
-    //EVENT BUS START
-   /* @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void setDoctorAdapter(DoctorDoneEvent event)
-    {
-        MyDoctorAdapter adapter = new MyDoctorAdapter(getContext(), event.getDoctorList());
-        recycler_doctor.setAdapter(adapter);
-    }*/
-
 
     static BookingStep2Fragment instance;
 

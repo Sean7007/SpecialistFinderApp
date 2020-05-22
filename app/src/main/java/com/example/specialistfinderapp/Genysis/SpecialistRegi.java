@@ -16,10 +16,12 @@ import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.specialistfinderapp.R;
 import com.example.specialistfinderapp.User;
+import com.example.specialistfinderapp.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,6 +33,7 @@ public class SpecialistRegi extends AppCompatActivity {
     EditText fname, lname, email, phone, password, confPassword;
     AwesomeValidation awesomeValidation;
     private FirebaseAuth mAuth; //declaration of firebase
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,23 +84,30 @@ public class SpecialistRegi extends AppCompatActivity {
                             }else{
                                 //If successful print
                                 Toast.makeText(SpecialistRegi.this, "Registration Success!", Toast.LENGTH_SHORT).show();
+                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                String userid = firebaseUser.getUid();
 
-                                //Send data to db
-                                User user = new User(
-                                        cFName,
-                                        cLName,
-                                        cEmail,
-                                        cPhone
-                                );
-                                FirebaseDatabase.getInstance().getReference("Users").child("Specialists").setValue(user);
-                                       // .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                       // .setValue(user);
+                                reference = FirebaseDatabase.getInstance().getReference("Users").child("Specialists").child(userid);
 
-                                //Move to next frame
-                                Intent intent = new Intent(SpecialistRegi.this, SpecialistLogin.class);
-                                startActivity(intent);
-                                finish();
-                                return;
+                                HashMap<String, String> hashMap = new HashMap<>();
+                                hashMap.put("id", userid);
+                                hashMap.put("firstname", cFName );
+                                hashMap.put("lastname", cLName);
+                                hashMap.put("email", cEmail);
+                                hashMap.put("phone", cPhone);
+
+                                reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            //Move to next frame
+                                            Intent intent = new Intent(SpecialistRegi.this, SpecialistLogin.class);
+                                            startActivity(intent);
+                                            finish();
+                                            return;
+                                        }
+                                    }
+                                });
                             }
                         }//End of onComplete
                     });//End of addOnComplete

@@ -26,6 +26,7 @@
         android:id="@+id/booking_view_pager"
         android:layout_below="@+id/step_view"
         android:layout_above="@+id/layout_button"
+        android:fontFamily="@font/bellerose"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <LinearLayout
@@ -39,6 +40,7 @@
         <Button
             android:id="@+id/btn_previous_step"
             android:text="Previous"
+            android:fontFamily="@font/bellerose"
             android:enabled="false"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/txt_skip"
@@ -51,6 +53,7 @@
         <Button
             android:id="@+id/btn_next_step"
             android:text="Next"
+            android:fontFamily="@font/bellerose"
             android:enabled="false"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/txt_skip"

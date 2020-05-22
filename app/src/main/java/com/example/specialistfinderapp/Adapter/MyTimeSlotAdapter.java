@@ -2,6 +2,7 @@ package com.example.specialistfinderapp.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,34 +30,36 @@ public class MyTimeSlotAdapter extends RecyclerView.Adapter<MyTimeSlotAdapter.My
     public MyTimeSlotAdapter(Context context) {
         this.context = context;
         this.timeSlotList = new ArrayList<>();
-        this.localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        localBroadcastManager = LocalBroadcastManager.getInstance(context);
         cardViewList = new ArrayList<>();
 
     }
 
     public MyTimeSlotAdapter(Context context, List<TimeSlot> timeSlotList) {
         this.context = context;
-        this.timeSlotList = new ArrayList<>();
-        this.localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        this.timeSlotList = new ArrayList<>(); //for now
+        localBroadcastManager = LocalBroadcastManager.getInstance(context);
         cardViewList = new ArrayList<>();
-
-
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View itemView = LayoutInflater.from(context).inflate(R.layout.layout_time_slot, parent, false);
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        holder.txt_time_slot.setText(new StringBuffer(Common.convertTimeSlotToString(position)).toString());
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+        holder.txt_time_slot.setText(new StringBuilder(Common.convertTimeSlotToString(position)).toString());
+
         if(timeSlotList.size() == 0) //If all position is available, just show list
         {
+            holder.card_time_slot.setEnabled(true);
+
             holder.txt_time_slot_description.setText("Available");
             holder.txt_time_slot_description.setTextColor(context.getResources()
-            .getColor(android.R.color.white));
+            .getColor(android.R.color.black));
             holder.txt_time_slot.setTextColor(context.getResources().getColor(android.R.color.black));
             holder.card_time_slot.setCardBackgroundColor(context.getResources().getColor(android.R.color.white));
         }
@@ -65,15 +68,16 @@ public class MyTimeSlotAdapter extends RecyclerView.Adapter<MyTimeSlotAdapter.My
             {
                 //Loop all time slot from server and set different color
                 int slot = Integer.parseInt(slotValue.getShot().toString());
-                if(slot == position) //If slot == position
-                {
+                if(slot == position){ //If slot == position
+
+                    holder.card_time_slot.setEnabled(false);
                     //We will set tag for all time slot is full
                     //So base on tag, we can all remain card background without change full time slow
                     holder.card_time_slot.setTag(Common.DISABLE_TAG);
                     holder.card_time_slot.setCardBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
                     holder.txt_time_slot_description.setText("Full");
-                    holder.txt_time_slot_description.setTextColor(context.getResources().getColor(android.R.color.white));
-                    holder.txt_time_slot.setTextColor(context.getResources().getColor(android.R.color.black));
+                    holder.txt_time_slot_description.setTextColor(context.getResources().getColor(android.R.color.black));
+                    holder.txt_time_slot.setTextColor(context.getResources().getColor(android.R.color.white));
                 }
             }
         }
@@ -82,26 +86,28 @@ public class MyTimeSlotAdapter extends RecyclerView.Adapter<MyTimeSlotAdapter.My
             cardViewList.add(holder.card_time_slot);
 
         //Check if card time slot is available
-        holder.setiRecyclerItemSelectedListener(new IRecyclerItemSelectedListener() {
-            @Override
-            public void onItemSelectedListener(View view, int pos) {
-                //Loop all card in card list
-                for(CardView cardView: cardViewList) {
-                    if (cardView.getTag() == null) //Only available card time slot can be changed
-                        cardView.setBackgroundColor(context.getResources()
-                                .getColor(android.R.color.white));
-                }
-                //Our selected card will be change color
-                holder.card_time_slot.setCardBackgroundColor(context.getResources()
-                .getColor(android.R.color.holo_orange_dark));
+        if(!timeSlotList.contains(position)) {
+            holder.setiRecyclerItemSelectedListener(new IRecyclerItemSelectedListener() {
+                @Override
+                public void onItemSelectedListener(View view, int pos) {
+                    //Loop all card in card list
+                    for (CardView cardView : cardViewList) {
+                        if (cardView.getTag() == null) //Only available card time slot can be changed
+                            cardView.setCardBackgroundColor(context.getResources()
+                                    .getColor(android.R.color.white));
+                    }
+                    //Our selected card will be change color
+                    holder.card_time_slot.setCardBackgroundColor(context.getResources()
+                            .getColor(android.R.color.holo_orange_dark));
 
-                //After that, send broadcast to enable button NEXT
-                Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
-                intent.putExtra(Common.KEY_TIME_SLOT, pos); //Put index of time slot we have selected
-                intent.putExtra(Common.KEY_STEP, 3); //Go to step 3
-                localBroadcastManager.sendBroadcast(intent);
-            }
-        });
+                    //After that, send broadcast to enable button NEXT
+                    Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
+                    intent.putExtra(Common.KEY_TIME_SLOT, position); //Put index of time slot we have selected
+                    intent.putExtra(Common.KEY_STEP, 3); //Go to step 3
+                    localBroadcastManager.sendBroadcast(intent);
+                }
+            });
+        }
     }
 
     @Override
@@ -130,7 +136,7 @@ public class MyTimeSlotAdapter extends RecyclerView.Adapter<MyTimeSlotAdapter.My
 
         @Override
         public void onClick(View v) {
-            this.iRecyclerItemSelectedListener = iRecyclerItemSelectedListener;
+            this.iRecyclerItemSelectedListener.onItemSelectedListener(v, getAdapterPosition());
         }
     }
 }

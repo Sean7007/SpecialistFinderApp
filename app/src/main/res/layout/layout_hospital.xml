@@ -16,6 +16,7 @@
         <TextView
             android:id="@+id/txt_hospital_name"
             android:text="Hospital #1"
+            android:fontFamily="@font/bellerose"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"
@@ -24,6 +25,7 @@
         <TextView
             android:id="@+id/txt_hospital_address"
             android:text="Hospital Address"
+            android:fontFamily="@font/bellerose"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"

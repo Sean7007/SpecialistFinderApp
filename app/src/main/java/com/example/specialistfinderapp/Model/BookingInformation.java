@@ -1,9 +1,14 @@
 package com.example.specialistfinderapp.Model;
 
-public class BookingInformation {
-    private String customerName, customerPhone, time, doctorId, doctorName, hospitalId, hospitalName,  hospitalAddress;
-    private Long slot;
+import com.google.firebase.Timestamp;
 
+public class BookingInformation {
+    private String cityBook, customerName, customerPhone, time, doctorId, doctorName, hospitalId, hospitalName,  hospitalAddress;
+    private Long slot;
+    private Timestamp timestamp;
+    private boolean done;
+
+    //Constructor
     public BookingInformation(){}
 
     public BookingInformation(String customerName, String customerPhone, String time, String doctorId,String doctorName,String hospitalId, String hospitalName, String hospitalAddress, Long slot) {
@@ -85,5 +90,29 @@ public class BookingInformation {
 
     public void setSlot(Long slot) {
         this.slot = slot;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
+    public String getCityBook() {
+        return cityBook;
+    }
+
+    public void setCityBook(String cityBook) {
+        this.cityBook = cityBook;
     }
 }

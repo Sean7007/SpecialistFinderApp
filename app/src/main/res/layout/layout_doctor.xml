@@ -23,6 +23,7 @@
         <TextView
             android:id="@+id/txt_doctor_name"
             android:text="Dr. David"
+            android:fontFamily="@font/bellerose"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"

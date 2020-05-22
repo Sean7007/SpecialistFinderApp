@@ -18,6 +18,7 @@
         android:padding="@dimen/activity_horizontal_margin">
 
         <TextView
+            android:fontFamily="@font/bellerose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -30,20 +31,34 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_email"
+            android:fontFamily="@font/bellerose"
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:id="@+id/email"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="30dp" />
+
         <EditText
-            android:layout_width="match_parent"
+        android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/bellerose"
+            android:drawableStart="@drawable/ic_remove_red_eye_black_24dp"
             android:hint="Password"
             android:id="@+id/password"
             android:layout_marginBottom="15dp"
             android:layout_marginStart="25dp"
-            android:layout_marginEnd="30dp" />
+            android:layout_marginEnd="30dp"
+            app:passwordToggleEnabled="true"/>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="false"
+            android:text="Hide Password" />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,36 +74,38 @@
             android:text="Back"
             android:textColor="@color/login_btn"
             android:id="@+id/back"
-            android:layout_marginBottom="20dp"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="30dp" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:textSize="15sp"
+            android:gravity="end"
             android:id="@+id/forgotPasswordTextView"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="160dp"
-            android:layout_marginEnd="150dp"
-            android:layout_marginBottom="30dp"
+            android:fontFamily="@font/bellerose"
             android:text="Forgot Password? Click Here!"
-            android:textSize="20dp"
-            android:textColor="@color/forgot"></TextView>
+            android:textColor="@color/forgot"/>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/bellerose"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:padding="4dp"
+            android:text="New User? SIGN UP"
             android:id="@+id/registrationTextView"
-            android:layout_width="351dp"
-            android:layout_height="92dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginEnd="150dp"
-            android:layout_marginBottom="100dp"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:text="Not a member? Get Registered to be a Member Now!"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"></TextView>
+            app:layout_constraintStart_toStartOf="parent"/>
         </LinearLayout>
 
    </LinearLayout>
