@@ -8,10 +8,8 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,20 +17,10 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
-import com.bumptech.glide.Glide;
 import com.example.specialistfinderapp.MainActivity;
 import com.example.specialistfinderapp.R;
-import com.example.specialistfinderapp.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class SpecialistLogin extends AppCompatActivity {
     //Variable Declaration
@@ -84,7 +72,7 @@ public class SpecialistLogin extends AppCompatActivity {
                 }//End of onAuthStateChanged
             };
 
-            //Set onClickListener of the login-button
+            /*Set onClickListener of the login-button
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -114,7 +102,7 @@ public class SpecialistLogin extends AppCompatActivity {
                         Toast.makeText(SpecialistLogin.this, "O Ja ERROR MR!", Toast.LENGTH_SHORT).show();
                     }
                 }
-            });
+            }); */
 
             //Set onClickListener of the register
             register.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +154,9 @@ public class SpecialistLogin extends AppCompatActivity {
 
         }
 
-        @Override
+
+
+    @Override
         protected void onStart () {
             super.onStart();
             mAuth.addAuthStateListener(firebaseAuthListener);

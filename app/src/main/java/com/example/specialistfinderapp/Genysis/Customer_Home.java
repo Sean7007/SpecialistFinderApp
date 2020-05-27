@@ -6,7 +6,9 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +46,9 @@ public class Customer_Home extends AppCompatActivity {
     FragmentTransaction fragmentTransaction;
 
     FirebaseUser firebaseUser;//Fire-base User
+    String uid;
+
+    List<String> itemlist;
 
     DatabaseReference reference;
     TextView cFname, username;
@@ -59,17 +64,23 @@ public class Customer_Home extends AppCompatActivity {
         setSupportActionBar(toolbar1);
         getSupportActionBar().setTitle("");
 
-
         username = findViewById(R.id.username);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = firebaseUser.getUid();
+        itemlist = new ArrayList<>();
+
         reference = FirebaseDatabase.getInstance().getReference("Users").child("Customers").child(firebaseUser.getUid());
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Users user = dataSnapshot.getValue(Users.class);
-                    assert user != null;
-                 //   username.setText(user.getcEmail());
+                if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))){
+                  String retrieve = dataSnapshot.child("name").getValue().toString();
+                  username.setText(retrieve);
+                }
+                else{
+                    Toast.makeText(Customer_Home.this, "Please set and update your info",Toast.LENGTH_SHORT).show();
+                }
                 }
 
 
@@ -95,8 +106,7 @@ public class Customer_Home extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_appointment);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_person_black_24dp);
-        tabLayout.getTabAt(4).setIcon(R.drawable.ic_payment_black_24dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_payment_black_24dp);
 
         setSupportActionBar(toolbar);
         fragmentManager = getSupportFragmentManager();
@@ -109,7 +119,6 @@ public class Customer_Home extends AppCompatActivity {
         tabLayout.getTabAt(1).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(2).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(3).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        tabLayout.getTabAt(4).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -139,7 +148,6 @@ public class Customer_Home extends AppCompatActivity {
         sectionPageAdapter.addFragment(CustomerHomeFragment1.newInstance(),"Home");
         sectionPageAdapter.addFragment(CustomerAppointmentFragment.newInstance(), "Booking");
         sectionPageAdapter.addFragment(CustomerChatFragment.newInstance(), "Chat");
-        sectionPageAdapter.addFragment(CustomerUserFragment.newInstance(), "Users");
         sectionPageAdapter.addFragment(CustomerPayFragment.newInstance(), "Payment");
         viewPager.setAdapter(sectionPageAdapter);
     }

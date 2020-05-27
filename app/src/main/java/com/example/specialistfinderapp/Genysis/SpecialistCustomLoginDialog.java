@@ -2,16 +2,28 @@ package com.example.specialistfinderapp.Genysis;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.specialistfinderapp.Interface.IDialogClickListener;
 import com.example.specialistfinderapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +40,9 @@ public class SpecialistCustomLoginDialog {
     Button login;
     @BindView(R.id.back)
     Button back;
+
+    FirebaseAuth mAuth; //declaration of fire-base
+
 
     public static SpecialistCustomLoginDialog mDialog;
     public IDialogClickListener iDialogClickListener;
@@ -75,6 +90,70 @@ public class SpecialistCustomLoginDialog {
                  iDialogClickListener.onClickNegativeButton(dialog);
              }
          });
+
+        //when the enter key is pressed
+        edt_password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == 100 || actionId == EditorInfo.IME_NULL) {
+
+                    //step12
+                    attemptLogIn();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    }
+
+    private void attemptLogIn() {
+        String emailV = edt_user.getText().toString();
+        String passwordV = edt_password.getText().toString();
+
+        if (emailV.equals("") || passwordV.equals("")) {
+            //we dont continue to log in
+            return;
+        }
+        else{
+            //Toast.makeText(getApplicationContext(),"Login in Progress...",Toast.LENGTH_SHORT).show();
+
+            //returns a TAsk Object, we are adding the addOnCompleteListener so we can see if the user has been signed in
+            mAuth.signInWithEmailAndPassword(emailV, passwordV).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    Log.d("whatsaa", "witnInWithEmail() onComplete: " + task.isSuccessful());
+
+                    //this is triggered when the task is not successful
+                    if (!task.isSuccessful()) {
+                        Log.d("whatsaa", "Problem signing in:  " + task.getException());
+
+                        //step14
+
+                        showErrorDialog("There was a problem signing in!");
+
+                    }
+                    else{
+                       // Intent intent = new Intent(SpecialistCustomLoginDialog.this, SpecialistHome2.class);
+                       // finish();
+                       // startActivity(intent);
+                    }
+
+                }
+
+            });
+
+        }
+
+    }
+
+    private void showErrorDialog(String message) {
+       /* new AlertDialog.Builder(this)
+                .setTitle("Oops")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();*/
 
     }
 }

@@ -112,14 +112,7 @@ public class CustomerRegi extends AppCompatActivity {
                                               }
                                             }
                                         });
-                                        /*Send data to db
-                                        Users user = new Users(cFName, cLName, cEmail, cPhone);
-                                        FirebaseDatabase.getInstance().getReference("Users").child("Customers").setValue(user);
-                                        //Move to next frame
-                                        Intent intent = new Intent(CustomerRegi.this, CustomerLogin.class);
-                                        startActivity(intent);
-                                        finish();
-                                        return;*/
+
                                     }
                                     }//End of onComplete
                             });//End of addOnComplete
