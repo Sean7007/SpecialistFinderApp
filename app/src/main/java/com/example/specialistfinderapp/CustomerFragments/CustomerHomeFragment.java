@@ -127,7 +127,7 @@ public class CustomerHomeFragment extends FragmentActivity implements OnMapReady
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(CustomerHomeFragment.this, MainActivity.class);
+                Intent intent = new Intent(CustomerHomeFragment.this, ChatMainActivity.class);
                 startActivity(intent);
                 finish();
                 return;
@@ -289,14 +289,14 @@ public class CustomerHomeFragment extends FragmentActivity implements OnMapReady
     /*-------------------------------------------- Map specific functions -----
     |  Function(s) getDocLocation
     |
-    |  Purpose:  Get's most updated driver location and it's always checking for movements.
+    |  Purpose:  Get's most updated customer location and it's always checking for movements.
     |
     |  Note:
     |	   Even tho we used geofire to push the location of the driver we can use a normal
     |      Listener to get it's location with no problem.
     |
     |      0 -> Latitude
-    |      1 -> Longitudde
+    |      1 -> Longitude
     |
     *-------------------------------------------------------------------*/
     private Marker mDocMarker;

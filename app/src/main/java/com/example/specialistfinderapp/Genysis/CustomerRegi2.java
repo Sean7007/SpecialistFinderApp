@@ -22,26 +22,16 @@ import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
-import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.specialistfinderapp.R;
-import com.example.specialistfinderapp.Users;
-import com.example.specialistfinderapp.util.FirestoreUserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class CustomerRegi2 extends AppCompatActivity {
     AwesomeValidation awesomeValidation;
@@ -122,41 +112,18 @@ public class CustomerRegi2 extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "success");
-                                        FirestoreUserModel user = new FirestoreUserModel(username, email, password);
-                                        FirebaseUser user1 = mAuth.getCurrentUser();
 
                                         Intent intent = new Intent(CustomerRegi2.this, CustomerLogin.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();
-                                            /*DocumentReference currentUser = userRef.document(email)
-                                                    .set(username)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            Toast.makeText(CustomerRegi2.this, "Successfulu", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(CustomerRegi2.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-
-                                                        }
-                                                    });*/
-
-
-                                        // user.child("details").child("username").setValue(username);
-                                        // user.child("details").child("password").setValue(password);
 
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                         Toast.makeText(CustomerRegi2.this, "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
-                                        //  updateUI(null);
                                     }
-
-                                    // ...
                                 }
                             });
 
@@ -168,37 +135,5 @@ public class CustomerRegi2 extends AppCompatActivity {
 
     }
 
-    private void CreateUserAccount(String email, final String name, String password) {
-
-
-        // this method create user account with specific email and password
-
-       /* mAuth.createUserWithEmailAndPassword(email,password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            // user account created successfully
-                            showMessage("Account created");
-                            // after we created user account we need to update his profile picture and name
-                            updateUserInfo( name ,pickedImgUri,mAuth.getCurrentUser());
-
-
-
-                        }
-                        else
-                        {
-
-                            // account creation failed
-                            showMessage("account creation failed" + task.getException().getMessage());
-                            regBtn.setVisibility(View.VISIBLE);
-                            loadingProgress.setVisibility(View.INVISIBLE);
-
-                        }
-                    }
-                });
-
-    }*/
     }
-}
+

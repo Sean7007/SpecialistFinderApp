@@ -177,7 +177,7 @@ public class SpecHomeFragment extends FragmentActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SpecHomeFragment.this, HistoryActivity.class);
-                intent.putExtra("customerOrDriver", "Drivers");
+                intent.putExtra("customerOrDriver", "Specialists");
                 startActivity(intent);
                 return;
             }

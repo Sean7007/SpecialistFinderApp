@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class SpecialistRegi extends AppCompatActivity {
     //Variable Declaration
     Button register, back;
-    EditText fname, lname, email, phone, password, confPassword;
+    EditText fname, lname, cemail,cphone, password, confPassword;
     AwesomeValidation awesomeValidation;
     private FirebaseAuth mAuth; //declaration of firebase
     DatabaseReference reference;
@@ -45,10 +45,11 @@ public class SpecialistRegi extends AppCompatActivity {
         back= findViewById(R.id.back);
         fname= findViewById(R.id.fname);
         lname= findViewById(R.id.lname);
-        email= findViewById(R.id.email);
-        phone = findViewById(R.id.phoneNo);
-        password= findViewById(R.id.password);
-        confPassword= findViewById(R.id.confPassword);
+        cemail= findViewById(R.id.cemail);
+        cphone= findViewById(R.id.cphoneNo);
+
+        password= findViewById(R.id.cpassword);
+        confPassword= findViewById(R.id.cconfPassword);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -58,8 +59,9 @@ public class SpecialistRegi extends AppCompatActivity {
         awesomeValidation.addValidation(SpecialistRegi.this, R.id.fname, "[a-zA-Z\\s]+", R.string.fnameerr);
         awesomeValidation.addValidation(SpecialistRegi.this, R.id.lname, "[a-zA-Z\\s]+", R.string.lnameerr);
         //Validation of email
-        awesomeValidation.addValidation(SpecialistRegi.this, R.id.email, Patterns.EMAIL_ADDRESS, R.string.emailerr);
-        awesomeValidation.addValidation(SpecialistRegi.this, R.id.phoneNo, RegexTemplate.TELEPHONE, R.string.phoneerr);
+        //Validation of email
+        awesomeValidation.addValidation(SpecialistRegi.this, R.id.cemail, Patterns.EMAIL_ADDRESS, R.string.emailerr);
+        awesomeValidation.addValidation(SpecialistRegi.this, R.id.cphoneNo, RegexTemplate.TELEPHONE, R.string.phoneerr);
         awesomeValidation.addValidation(SpecialistRegi.this, R.id.password, regexPassword, R.string.passerr);
         awesomeValidation.addValidation(SpecialistRegi.this, R.id.confPassword, R.id.password, R.string.cnfpasserr);
 
@@ -68,14 +70,14 @@ public class SpecialistRegi extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Authenticating variables
-                final String cFName = fname.getText().toString();
-                final String cLName = lname.getText().toString();
-                final String cEmail = email.getText().toString();
-                final String cPhone = phone.getText().toString();
+                final String firstname = fname.getText().toString();
+                final String lastname = lname.getText().toString();
+                final String email = cemail.getText().toString();
+                final String cPhone = cphone.getText().toString();
                 final String cPassword = password.getText().toString();
 
                 if(awesomeValidation.validate()){
-                    mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
+                    mAuth.createUserWithEmailAndPassword(email, cPassword)
                             .addOnCompleteListener(SpecialistRegi.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -91,9 +93,9 @@ public class SpecialistRegi extends AppCompatActivity {
 
                                 HashMap<String, String> hashMap = new HashMap<>();
                                 hashMap.put("id", userid);
-                                hashMap.put("firstname", cFName );
-                                hashMap.put("lastname", cLName);
-                                hashMap.put("email", cEmail);
+                                hashMap.put("firstname", firstname );
+                                hashMap.put("lastname", lastname );
+                                hashMap.put("email", email);
                                 hashMap.put("phone", cPhone);
 
                                 reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {

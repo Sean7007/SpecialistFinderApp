@@ -26,10 +26,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MessageActivity"></activity>
+
+        <activity android:name=".SpecialistFragments.SpecMapActivity" />
+        <activity android:name=".MessageActivity" />
         <activity android:name=".Genysis.CustomerRegi2" />
         <activity android:name=".SpecialistFragments.StaffActivityHome" />
         <activity android:name=".CustomerFragments.BookingActivity" />
+        <activity android:name=".CustomerFragments.ChatActivity.SettingsActivity" />
+        <activity android:name=".CustomerFragments.ChatActivity.LoginActivity" />
+        <activity android:name=".CustomerFragments.ChatActivity.FindFriendsActivity" />
+        <activity android:name=".CustomerFragments.ChatActivity.PhoneLoginActivity" />
+        <activity android:name=".CustomerFragments.ChatActivity.ChatActivity" />
+        <activity android:name=".CustomerFragments.ChatActivity.ChatMainActivity" />
+        <activity android:name=".CustomerFragments.ChatActivity.RegisterActivity" />
+
+
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -51,9 +62,6 @@
             android:value="@string/google_map_key" />
 
         <activity
-            android:name=".CustomerMapActivity"
-            android:label="@string/title_activity_customer_map" />
-        <activity
             android:name=".Genysis.Customer_Home"
             android:label="@string/title_activity_customer__home"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -66,10 +74,13 @@
         <activity android:name=".Genysis.SpecialistHome" />
         <activity android:name=".Genysis.SpecialistHome2" />
         <activity android:name=".Genysis.SpecialistRegi" />
+        <activity android:name=".Genysis.SpecialistCustomLoginDialog" />
         <activity android:name=".Genysis.SpecialistLogin" />
         <activity android:name=".Genysis.CustomerRegi" />
         <activity android:name=".Genysis.CustomerLogin" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

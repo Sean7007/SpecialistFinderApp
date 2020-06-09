@@ -1,9 +1,9 @@
 package com.example.specialistfinderapp.SpecialistFragments;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,38 +12,43 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.specialistfinderapp.Adapter.MyTimeSlotAdapter;
 import com.example.specialistfinderapp.Adapter.MyTimeSlotAdapter2;
 import com.example.specialistfinderapp.Genysis.SpecialistHome2;
-import com.example.specialistfinderapp.Interface.ITimeSlotLoadListener;
+import com.example.specialistfinderapp.Genysis.SpecialistLogin;
+import com.example.specialistfinderapp.Interface.INotificationCountListener;
 import com.example.specialistfinderapp.Interface.ITimeSlotLoadListener2;
-import com.example.specialistfinderapp.Model.Doctor;
-import com.example.specialistfinderapp.Model.Hospital;
 import com.example.specialistfinderapp.Model.TimeSlot;
 import com.example.specialistfinderapp.R;
+
 import com.example.specialistfinderapp.util.Common;
 import com.example.specialistfinderapp.util.SpacesItemDecoration;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Formatter;
+
+import javax.annotation.Nullable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,10 +58,9 @@ import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
 
-import static com.example.specialistfinderapp.util.Common.LOGGED_KEY;
 import static com.example.specialistfinderapp.util.Common.simpleDateFormat;
 
-public class StaffActivityHome extends AppCompatActivity implements ITimeSlotLoadListener2 {
+public class StaffActivityHome extends AppCompatActivity implements ITimeSlotLoadListener2, INotificationCountListener, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.activity_main)
     DrawerLayout drawerLayout;
@@ -73,20 +77,57 @@ public class StaffActivityHome extends AppCompatActivity implements ITimeSlotLoa
     HorizontalCalendarView calendarView;
     DocumentReference doctorDoc;
 
+    //Notification variables
+    TextView txt_notification_badge;
+    CollectionReference notificationCollection;
+    CollectionReference currentBookDateCollection;
+
+    EventListener<QuerySnapshot> notificationEvent;
+    EventListener<QuerySnapshot> bookingEvent;
+
+    ListenerRegistration notificationListener;
+    ListenerRegistration bookingRealtimelistener;
+
+    INotificationCountListener iNotificationCountListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_home);
+
+        drawerLayout = findViewById(R.id.activity_main);
+        navigationView = findViewById(R.id.navigation_view);
+
+        Button map = findViewById(R.id.map);
+        Button chat = findViewById(R.id.chat);
+
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StaffActivityHome.this, SpecialistLogin.class);
+                startActivity(intent);
+                return;
+            }
+        });
+
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StaffActivityHome.this, SpecChatFragment.class);
+                startActivity(intent);
+                return;
+            }
+        });
+
+
         ButterKnife.bind(this);
         init();
         initView();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(actiionBarDrawerToggle.onOptionsItemSelected(item))
-            return true;
-        return super.onOptionsItemSelected(item);
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return true;
     }
 
     private void initView() {
@@ -96,15 +137,16 @@ public class StaffActivityHome extends AppCompatActivity implements ITimeSlotLoa
         drawerLayout.addDrawerListener(actiionBarDrawerToggle);
         actiionBarDrawerToggle.syncState();
 
-
+       if(drawerLayout != null){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 if(menuItem.getItemId() == R.id.exit)
-                    logOut();
-                return true;
+                         logOut();
+                          return true;
             }
         });
+       }
 
         //Copy from FragmentStep3
         alertDialog = new SpotsDialog.Builder().setCancelable(false).setContext(this).build();
@@ -174,16 +216,9 @@ public class StaffActivityHome extends AppCompatActivity implements ITimeSlotLoa
     }
 
     private void loadAvailableTimeSlotOfDoctor(String doctorId, String bookDate) {
-           //
+        //
         alertDialog.show();
 
-        doctorDoc = FirebaseFirestore.getInstance()
-                .collection("AllHospitals")
-                .document(Common.state_name)
-                .collection("Branch")
-                .document(Common.selectedHospital.getHospitalId())
-                .collection("Doctors")
-                .document(doctorId);
 
         //Get Information of this doctor
         doctorDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -235,11 +270,67 @@ public class StaffActivityHome extends AppCompatActivity implements ITimeSlotLoa
     }
 
     private void init() {
+        initNotificationRealtimeUpdate();
+        iNotificationCountListener = this;
         iTimeSlotLoadListener2 = this;
+        initBookingRealtimeUpdate();
+    }
+
+    private void initBookingRealtimeUpdate() {
+        doctorDoc = FirebaseFirestore.getInstance()
+                .collection("AllHospitals")
+                .document(Common.state_name)
+                .collection("Branch")
+                .document(Common.selectedHospital.getHospitalId())
+                .collection("Doctors")
+                .document(Common.currentDoctor.getDoctorId());
+
+        //Get Current date
+        final Calendar date = Calendar.getInstance();
+        date.add(Calendar.DATE,0);
+        bookingEvent = new EventListener<QuerySnapshot>(){
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                //If have any new booking, update adapter
+                loadAvailableTimeSlotOfDoctor(Common.currentDoctor.getDoctorId(),
+                        Common.simpleDateFormat.format(date.getTime()));
+            }
+        };
+        currentBookDateCollection = doctorDoc.collection(Common.simpleDateFormat.format(date.getTime()));
+        bookingRealtimelistener = currentBookDateCollection.addSnapshotListener(bookingEvent);
+    }
+
+    private void initNotificationRealtimeUpdate() {
+        notificationCollection = FirebaseFirestore.getInstance()
+                .collection("AllHospitals")
+                .document(Common.state_name)
+                .collection("Branch")
+                .document(Common.selectedHospital.getHospitalId())
+                .collection("Doctors")
+                .document(Common.currentDoctor.getDoctorId())
+                .collection("Notifications");
+
+        notificationEvent = new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(queryDocumentSnapshots.size() > 0)
+                    loadNotification();
+            }
+        };
+        notificationListener = notificationCollection.whereEqualTo("read", false) //Only listen and count all notifications
+        .addSnapshotListener(notificationEvent);
+
     }
 
     @Override
     public void onBackPressed(){
+        //To ensure the application does not close when navigation is opened
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else{
+            super.onBackPressed();
+        }
+
         new AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to exit?")
                 .setCancelable(false)
@@ -277,4 +368,95 @@ public class StaffActivityHome extends AppCompatActivity implements ITimeSlotLoa
 
      alertDialog.dismiss();
     }
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.staff_home_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_new_notification);
+
+        txt_notification_badge = (TextView)menuItem.getActionView().findViewById(R.id.notification_badge);
+        loadNotification();
+        menuItem.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void loadNotification() {
+     notificationCollection.whereEqualTo("read", false)
+             .get()
+             .addOnFailureListener(new OnFailureListener() {
+                 @Override
+                 public void onFailure(@NonNull Exception e) {
+                     Toast.makeText(StaffActivityHome.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                 }
+             }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+         @Override
+         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+             if(task.isSuccessful()){
+                 iNotificationCountListener.onNotificationCountSuccess(task.getResult().size());
+             }
+         }
+     });
+    }
+
+    @Override
+    public void onNotificationCountSuccess(int count) {
+      if(count == 0)
+          txt_notification_badge.setVisibility(View.INVISIBLE);
+      else
+      {
+          txt_notification_badge.setVisibility(View.VISIBLE);
+          if (count <= 9)
+              txt_notification_badge.setText(String.valueOf(count));
+          else
+              txt_notification_badge.setText("9+");
+      }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initBookingRealtimeUpdate();
+        initNotificationRealtimeUpdate();
+    }
+
+    @Override
+    protected void onStop() {
+        if(notificationListener != null)
+            notificationListener.remove();
+        if (bookingRealtimelistener != null)
+            bookingRealtimelistener.remove();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(notificationListener != null)
+            notificationListener.remove();
+        if (bookingRealtimelistener != null)
+            bookingRealtimelistener.remove();
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+
+            case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(StaffActivityHome.this, SpecialistLogin.class));
+                finish();
+                return true;
+        }
+        return false;
+    }
+
+
 }

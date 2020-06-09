@@ -6,11 +6,8 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -23,17 +20,11 @@ import com.example.specialistfinderapp.CustomerFragments.CustomerAppointmentFrag
 import com.example.specialistfinderapp.CustomerFragments.CustomerChatFragment;
 import com.example.specialistfinderapp.CustomerFragments.CustomerHomeFragment1;
 import com.example.specialistfinderapp.CustomerFragments.CustomerPayFragment;
-import com.example.specialistfinderapp.CustomerFragments.CustomerUserFragment;
 import com.example.specialistfinderapp.R;
-import com.example.specialistfinderapp.Users;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,33 +53,12 @@ public class Customer_Home extends AppCompatActivity {
         //===========================================CHAT ==========================//
         Toolbar toolbar1 = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar1);
-        getSupportActionBar().setTitle("");
+       // getSupportActionBar().setTitle("");
 
         username = findViewById(R.id.username);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         uid = firebaseUser.getUid();
         itemlist = new ArrayList<>();
-
-        reference = FirebaseDatabase.getInstance().getReference("Users").child("Customers").child(firebaseUser.getUid());
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name"))){
-                  String retrieve = dataSnapshot.child("name").getValue().toString();
-                  username.setText(retrieve);
-                }
-                else{
-                    Toast.makeText(Customer_Home.this, "Please set and update your info",Toast.LENGTH_SHORT).show();
-                }
-                }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         mAuth = FirebaseAuth.getInstance();
 

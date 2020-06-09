@@ -11,6 +11,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,10 +62,11 @@ public class CustomerAppointmentFragment extends Fragment implements IBookingInf
     IBookingInfoLoadListener iBookingInfoLoadListener;
     IBookingInformationChangeListener iBookingInformationChangeListener;
 
+    Button btn_change_booking,btn_delete_booking;
     AlertDialog dialog;
 
 
-    /*@BindView(R.id.card_booking_info)
+   /* @BindView(R.id.card_booking_info)
     CardView card_booking_info;
     @BindView(R.id.txt_hospital_address)
     TextView txt_hospital_address;
@@ -74,7 +76,8 @@ public class CustomerAppointmentFragment extends Fragment implements IBookingInf
     TextView txt_time;
     @BindView(R.id.txt_time_remain)
     TextView txt_time_remain;
-    @OnClick(R.id.card_view_booking)*/
+
+    @OnClick(R.id.card_view_booking);*/
 
     @OnClick(R.id.btn_delete_booking)
     void deleteBooking(){
@@ -141,8 +144,8 @@ public class CustomerAppointmentFragment extends Fragment implements IBookingInf
         //First, We need to get Information from user Object
         if(!TextUtils.isEmpty(Common.currentBookingId)) {
             DocumentReference userBookingInfo = FirebaseFirestore.getInstance()
-                    // .collection("User")
-                    // .document(Common.currentUser.getPhoneNumber())
+                     //.collection("User")
+                     //.document(Common.currentUser.getPhoneNumber())
                     .collection("Booking")
                     .document(Common.currentBookingId);
 
@@ -164,11 +167,11 @@ public class CustomerAppointmentFragment extends Fragment implements IBookingInf
                         Uri eventUri = Uri.parse(Paper.book().read(Common.EVENT_URI_CACHE).toString());
                         getActivity().getContentResolver().delete(eventUri,null, null);
                         Toast.makeText(getActivity(),"Success Delete Booking!", Toast.LENGTH_SHORT).show();
-                        /*Uri eventUri = null;
+                        eventUri = null;
                         if(eventString!=null && !TextUtils.isEmpty(eventString))
                             eventUri = Uri.parse(eventString);
                         if(eventUri!=null)
-                            getActivity().getContentResolver().delete(eventUri, null, null);*/
+                            getActivity().getContentResolver().delete(eventUri, null, null);
                     }
 
                     Toast.makeText(getActivity(), "Success delete booking !", Toast.LENGTH_SHORT).show();
@@ -212,7 +215,7 @@ public class CustomerAppointmentFragment extends Fragment implements IBookingInf
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //loadUserBooking();
+        loadUserBooking();
         dialog = new SpotsDialog.Builder().setContext(getContext()).setCancelable(false).build();
     }
 
@@ -228,6 +231,8 @@ public class CustomerAppointmentFragment extends Fragment implements IBookingInf
         txt_hospital_doctor = view.findViewById(R.id.txt_hospital_doctor);
         txt_time = view.findViewById(R.id.txt_time);
         txt_time_remain = view.findViewById(R.id.txt_time_remain);
+        btn_delete_booking = view.findViewById(R.id.btn_delete_booking);
+        btn_change_booking = view.findViewById(R.id.btn_change_booking);
 
         //Init
         Slider.init(new PicassoImageLoadingService());
@@ -248,6 +253,19 @@ public class CustomerAppointmentFragment extends Fragment implements IBookingInf
                 return;
             }
         });
+        btn_delete_booking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteBookingFromDoctor(false);
+            }
+        });
+
+        btn_change_booking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changingBookingFromUser();
+            }
+        });
 
         return view;
     }
@@ -260,8 +278,8 @@ public class CustomerAppointmentFragment extends Fragment implements IBookingInf
 
     private void loadUserBooking() {
         CollectionReference userBooking = FirebaseFirestore.getInstance()
-                //.collection("Users")
-                //.document(Common.currentUser.getAdress())
+               // .collection("Users")
+               // .document(Common.currentUser.getAdress())
                 .collection("Booking");
 
         //Get current date

@@ -34,5 +34,22 @@
     <string name="stylelist_bullet">\u2022 Stylelist:</string>
     <string name="bullet">\u2022 :</string>
 
+    <string name="prompt_msg">Type a message</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">Password too short or does not match</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_register">Register</string>
+    <string name="sample_message">Hello!</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_password_again">Password Again</string>
+
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_send">Send</string>
+    <string name="prompt_username">Username</string>
+
+
 
 </resources>

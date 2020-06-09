@@ -7,14 +7,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="@font/bellerose"
+        android:text="This is where you will be able to see your location in realtime aswell as your Specialist.\n
+        To access the interactive map press the below button.\n Remember to turn on your loctaion settings within your phone for better location accuracy."/>
+
     <Button
         android:id="@+id/accessMapp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="15dp"
         android:fontFamily="@font/bellerose"
-        android:text="Access Map Here!"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="15dp"/>
+        android:text="Access Map Here!" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/container"

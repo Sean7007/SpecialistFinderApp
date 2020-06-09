@@ -35,6 +35,9 @@ import com.example.specialistfinderapp.util.Common;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -84,19 +87,6 @@ public class MyHospitalAdapter2 extends RecyclerView.Adapter<MyHospitalAdapter2.
                    public void onItemSelectedListener(View view, int pos) {
                        Common.selectedHospital = hospitalList.get(pos);
                        showLoginDialog();
-
-                       /*for(CardView cardView: cardViewList)
-                           //Set background for all card not selected to White
-                           cardView.setCardBackgroundColor(context.getResources().getColor(android.R.color.white));
-
-                       //Set selected BG for only selected item
-                       holder.card_hospital.setCardBackgroundColor(context.getResources()
-                       .getColor(android.R.color.holo_orange_dark));
-
-                       //Send Broadcast to tell Booking Activity enable Button next
-                       Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
-                       intent.putExtra(Common.KEY_HOSPITAL_STORE,hospitalList.get(pos));
-                       intent.putExtra(Common.KEY_STEP, 1 );*/
                    }
                });
     }
@@ -120,7 +110,7 @@ public class MyHospitalAdapter2 extends RecyclerView.Adapter<MyHospitalAdapter2.
       //Show loading
         AlertDialog loading = new SpotsDialog.Builder().setCancelable(false).setContext(context).build();
         loading.show();
-        /*FirebaseFirestore.getInstance().collection("AllHospitals")
+        FirebaseFirestore.getInstance().collection("AllHospitals")
                 .document(Common.state_name)
                 .collection("Branch")
                 .document(Common.selectedHospital.getHospitalId())
@@ -162,7 +152,9 @@ public class MyHospitalAdapter2 extends RecyclerView.Adapter<MyHospitalAdapter2.
                     }
                 }
             }
-        });*/
+        });
+
+
     }
 
     @Override

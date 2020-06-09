@@ -2,6 +2,7 @@ package com.example.specialistfinderapp.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.specialistfinderapp.MessageActivity;
 import com.example.specialistfinderapp.R;
-import com.example.specialistfinderapp.User;
 import com.example.specialistfinderapp.Users;
 
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
+    private static final String TAG = "UserAdapter";
     private Context mContext;
     private List<Users> mUsers;
 
@@ -26,14 +27,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         this.mContext = mContext;
 
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
          //Variables
         public TextView username;
 
         //Constructor
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             username = itemView.findViewById(R.id.username);
         }
     }
@@ -47,14 +47,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Users user = mUsers.get(position);
-        holder.username.setText(user.getcFName());
+
+        holder.username.setText(user.getFirstname());
+        Log.d(TAG, "onBindViewHolder: "+  user.getFirstname()); //NULL
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) {
-            /*    Intent intent = new Intent(mContext, MessageActivity.class);
-                intent.putExtra("userid", user.getId());
-                mContext.startActivity(intent);*/
+                Intent intent = new Intent(mContext, MessageActivity.class);
+                intent.putExtra("userid", user.getFirstname());
+                mContext.startActivity(intent);
             }
         });
 
@@ -62,6 +65,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "getItemCount: " + mUsers.size());
+
         return mUsers.size();
+
     }
 }

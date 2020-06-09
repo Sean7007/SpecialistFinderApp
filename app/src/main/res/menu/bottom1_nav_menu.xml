@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
     <item
         android:id="@+id/homeFragment"
         android:enabled="true"
@@ -19,22 +21,12 @@
         android:icon="@drawable/ic_chat"
         android:title="Chat"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/settings"
-        android:enabled="true"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/share"
-        android:enabled="true"
-        android:icon="@drawable/ic_share"
-        android:title="Share"
-        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/exit"
         android:enabled="true"
         android:icon="@drawable/ic_exit"
         android:title="Exit"
         app:showAsAction="ifRoom"/>
+    </group>
 </menu>

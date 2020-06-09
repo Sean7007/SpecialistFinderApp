@@ -1,6 +1,7 @@
 package com.example.specialistfinderapp.CustomerFragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -10,7 +11,10 @@ import androidx.fragment.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.specialistfinderapp.CustomerFragments.ChatActivity.ChatMainActivity;
+import com.example.specialistfinderapp.CustomerFragments.ChatActivity.LoginActivity;
 import com.example.specialistfinderapp.R;
 
 
@@ -23,6 +27,7 @@ public class CustomerChatFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private static CustomerChatFragment INSTANCE =null;
     View view;
+    Button accessChat;
 
     //Constructor
     public CustomerChatFragment() {
@@ -52,6 +57,16 @@ public class CustomerChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_customer_chat, container, false);
+
+        accessChat = view.findViewById(R.id.accessChat);
+        accessChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), LoginActivity.class);
+                getActivity().startActivity(i);
+               return;
+            }
+        });
         return view;
     }
 

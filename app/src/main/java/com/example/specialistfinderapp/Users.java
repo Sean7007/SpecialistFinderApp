@@ -1,51 +1,56 @@
 package com.example.specialistfinderapp;
 
 public class Users {
-    private String cFName;
-    private String cLName;
-    private String cEmail;
-    private String cPhone;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String phone;
 
-    public Users() {
+
+    public String getFirstname() {
+        return firstname;
     }
 
-    public Users(String cFName, String cLName, String cEmail, String cPhone) {
-        this.cFName = cFName;
-        this.cLName = cLName;
-        this.cEmail = cEmail;
-        this.cPhone = cPhone;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getcFName() {
-        return cFName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setcFName(String cFName) {
-        this.cFName = cFName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public String getcLName() {
-        return cLName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setcLName(String cLName) {
-        this.cLName = cLName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getcEmail() {
-        return cEmail;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setcEmail(String cEmail) {
-        this.cEmail = cEmail;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getcPhone() {
-        return cPhone;
+    public Users(String firstname, String lastname, String email, String phone) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.phone = phone;
+    }
+    public Users(){}
+
+    public Users(String cEmail, String cPassword) {
     }
 
-    public void setcPhone(String cPhone) {
-        this.cPhone = cPhone;
-    }
+
+
 
 }

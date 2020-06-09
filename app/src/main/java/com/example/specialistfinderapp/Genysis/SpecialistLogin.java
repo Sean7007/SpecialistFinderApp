@@ -36,14 +36,14 @@ public class SpecialistLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_specialist_login);
+        setContentView(R.layout.activity_specialist_login2);
 
         mAuth = FirebaseAuth.getInstance(); //Retrieves state of Fire-base
         login = findViewById(R.id.login);
         back = findViewById(R.id.back);
         checkBox = findViewById(R.id.checkbox);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
+        email = findViewById(R.id.cemail);
+        password = findViewById(R.id.cpassword);
         register = findViewById(R.id.registrationTextView);
         forgot = findViewById(R.id.forgotPasswordTextView);
 
@@ -64,10 +64,9 @@ public class SpecialistLogin extends AppCompatActivity {
                         Intent intent = new Intent(SpecialistLogin.this, SpecialistHome.class);
                         startActivity(intent);
                         finish();
-                        Toast.makeText(SpecialistLogin.this, "You are logged in!", Toast.LENGTH_SHORT).show();
                         return;
                     } else {
-                        Toast.makeText(SpecialistLogin.this, "Please Login!", Toast.LENGTH_SHORT).show();
+                        //
                     }
                 }//End of onAuthStateChanged
             };

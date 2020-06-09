@@ -3,6 +3,7 @@ package com.example.specialistfinderapp.Genysis;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,20 +17,32 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.specialistfinderapp.Interface.IDialogClickListener;
 import com.example.specialistfinderapp.R;
+import com.example.specialistfinderapp.Userr;
+import com.example.specialistfinderapp.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SpecialistCustomLoginDialog {
+public class SpecialistCustomLoginDialog extends AppCompatActivity {
 
+    private static final String TAG = "SpecialistCustomLoginDialog" ;
     @BindView(R.id.txt_title)
     TextView txt_title;
     @BindView(R.id.edt_user)
@@ -40,8 +53,12 @@ public class SpecialistCustomLoginDialog {
     Button login;
     @BindView(R.id.back)
     Button back;
+    TextView register;
 
     FirebaseAuth mAuth; //declaration of fire-base
+    private FirebaseAuth.AuthStateListener firebaseAuthListener; //State Listener of FirebaseAuth
+    FirebaseDatabase database;
+    DatabaseReference users;
 
 
     public static SpecialistCustomLoginDialog mDialog;
@@ -81,6 +98,7 @@ public class SpecialistCustomLoginDialog {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mAuth = FirebaseAuth.getInstance(); //Retrieves state of Fire-base
                 iDialogClickListener.onClickPositiveButton(dialog, edt_user.getText().toString(),edt_password.getText().toString());
             }
         });
@@ -112,48 +130,70 @@ public class SpecialistCustomLoginDialog {
         String passwordV = edt_password.getText().toString();
 
         if (emailV.equals("") || passwordV.equals("")) {
-            //we dont continue to log in
+            //if empty we dont continue to log in
             return;
         }
         else{
             //Toast.makeText(getApplicationContext(),"Login in Progress...",Toast.LENGTH_SHORT).show();
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+            FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                    .setTimestampsInSnapshotsEnabled(true)
+                    .build();
+            firestore.setFirestoreSettings(settings);
 
             //returns a TAsk Object, we are adding the addOnCompleteListener so we can see if the user has been signed in
-            mAuth.signInWithEmailAndPassword(emailV, passwordV).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    Log.d("whatsaa", "witnInWithEmail() onComplete: " + task.isSuccessful());
+            mAuth = FirebaseAuth.getInstance(); //Retrieves state of Fire-base
+            if(!emailV.isEmpty() && !passwordV.isEmpty()) {
+                mAuth.signInWithEmailAndPassword(emailV, passwordV).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("whatsaa", "witnInWithEmail() onComplete: " + task.isSuccessful());
 
-                    //this is triggered when the task is not successful
-                    if (!task.isSuccessful()) {
-                        Log.d("whatsaa", "Problem signing in:  " + task.getException());
+                        //this is triggered when the task is not successful
+                        if (!task.isSuccessful()) {
+                            Log.d("whatsaa", "Problem signing in:  " + task.getException());
 
-                        //step14
+                            //step14
+                            showErrorDialog("There was a problem signing in!");
 
-                        showErrorDialog("There was a problem signing in!");
+                        } else {
+                            Intent intent = new Intent(SpecialistCustomLoginDialog.this, SpecialistHome2.class);
+                            finish();
+                            startActivity(intent);
+
+                        }
 
                     }
-                    else{
-                       // Intent intent = new Intent(SpecialistCustomLoginDialog.this, SpecialistHome2.class);
-                       // finish();
-                       // startActivity(intent);
-                    }
 
-                }
-
-            });
+                });
+            }
 
         }
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        mAuth.addAuthStateListener(firebaseAuthListener);
+    }
+
 
     private void showErrorDialog(String message) {
-       /* new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this)
                 .setTitle("Oops")
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();*/
+                .show();
 
     }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+        mAuth.removeAuthStateListener(firebaseAuthListener);
+    }
+
+
 }

@@ -26,6 +26,7 @@ import com.example.specialistfinderapp.Model.Doctor;
 import com.example.specialistfinderapp.Model.Hospital;
 import com.example.specialistfinderapp.R;
 import com.example.specialistfinderapp.User;
+import com.example.specialistfinderapp.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -71,7 +72,7 @@ public class Common {
     public static final String RATING_BARBER_ID = "RATING_BARBER_ID";
 
     public static String IS_LOGIN = "IsLogin";
-    public static User currentUser;
+    public static Users currentUser;
     public static int step = 0;
     public static String city = "";
     public static Doctor currentDoctor;
@@ -137,7 +138,7 @@ public class Common {
         return simpleDateFormat.format(date);
     }
 
-    /*public static String convertTimeSlotToString(Timestamp timestamp) {
+   /* public static String convertTimeSlotToString(Timestamp timestamp) {
         Date date = timestamp.toDate();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
         return simpleDateFormat.format(date);

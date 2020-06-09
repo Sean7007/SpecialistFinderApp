@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.specialistfinderapp.Model.BookingInformation;
+import com.example.specialistfinderapp.Model.MyNotification;
 import com.example.specialistfinderapp.R;
 import com.example.specialistfinderapp.User;
 import com.example.specialistfinderapp.util.Common;
@@ -43,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,15 +178,38 @@ public class BookingStep4Fragment extends Fragment {
                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                        @Override
                                        public void onSuccess(Void aVoid) {
-                                           if (dialog.isShowing())
-                                               dialog.dismiss();
+                                       //Create Notification
+                                           MyNotification myNotification = new MyNotification();
+                                           myNotification.setUid(UUID.randomUUID().toString());
+                                           myNotification.setTitle("New Booking");
+                                           myNotification.setContent("You have a new appointment!");
+                                           myNotification.setRead(false); //Filter notification with 'raed' is false on Doctor
 
-                                           addToCalendar(Common.bookingDate,
-                                                   Common.convertTimeSlotToString(Common.currentTimeSlot));
+                                           //Submit Notification to 'Notifications' collection of Doctor
+                                           FirebaseFirestore.getInstance()
+                                                   .collection("AllHospitals")
+                                                   .document(Common.city)
+                                                   .collection("Branch")
+                                                   .document(Common.currentHospital.getHospitalId())
+                                                   .collection("Doctor")
+                                                   .document(Common.currentDoctor.getDoctorId())
+                                                   .collection("Notifications") //if its not available, it will be created automatically
+                                                   .document(myNotification.getUid()) // Create unique key
+                                                   .set(myNotification)
+                                                   .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                       @Override
+                                                       public void onSuccess(Void aVoid) {
+                                                          // if (dialog.isShowing())
+                                                               dialog.dismiss();
 
-                                           resetStaticData();
-                                           getActivity().finish(); //Close Activity
-                                           Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                                                           addToCalendar(Common.bookingDate,
+                                                                   Common.convertTimeSlotToString(Common.currentTimeSlot));
+
+                                                           resetStaticData();
+                                                           getActivity().finish(); //Close Activity
+                                                           Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                                                       }
+                                                   });
                                        }
                                    }).addOnFailureListener(new OnFailureListener() {
                                @Override

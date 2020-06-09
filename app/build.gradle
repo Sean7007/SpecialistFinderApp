@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -42,7 +43,6 @@ android {
         implementation 'com.google.firebase:firebase-storage:16.0.3'
 
         implementation 'com.firebase:geofire-android:3.0.0'
-        implementation 'com.firebase:geofire-android:3.0.0'
 
         //Routing library for direction API
         implementation 'com.github.jd-alexander:library:1.1.0'
@@ -68,6 +68,11 @@ android {
         implementation 'com.google.android.material:material:1.0.0-alpha1'
         implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
 
+        //TRIAL
+        implementation 'com.google.firebase:firebase-messaging:20.2.0'
+        implementation 'com.firebaseui:firebase-ui-database:3.2.2'
+        implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+        implementation 'com.squareup.picasso:picasso:2.71828'
 
         implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 

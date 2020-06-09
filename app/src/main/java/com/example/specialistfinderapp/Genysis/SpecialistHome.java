@@ -104,12 +104,10 @@ public class SpecialistHome extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_appointment);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_settings);
-        tabLayout.getTabAt(4).setIcon(R.drawable.ic_share);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_chat);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_settings);
 
-        setSupportActionBar(toolbar);
+       // setSupportActionBar(toolbar);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         //fragmentTransaction.add(R.id.fragment_customer_home_fragment1,home,"home");
@@ -118,8 +116,6 @@ public class SpecialistHome extends AppCompatActivity {
         tabLayout.getTabAt(0).getIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(1).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(2).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        tabLayout.getTabAt(3).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        tabLayout.getTabAt(4).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -142,10 +138,8 @@ public class SpecialistHome extends AppCompatActivity {
     private void setupWithViewPager(ViewPager viewPager) {
         SectionPageAdapterr sectionPageAdapter = new SectionPageAdapterr(getSupportFragmentManager());
         sectionPageAdapter.addFragment(SpecialistFragmentHome1.newInstance(),"Home");
-        sectionPageAdapter.addFragment(SpecApointmentFragment.newInstance(), "Appointment");
         sectionPageAdapter.addFragment(SpecChatFragment.newInstance(), "Chat");
         sectionPageAdapter.addFragment(SpecSettingFragment.newInstance(), "Settings");
-        sectionPageAdapter.addFragment(SpecShareFragment.newInstance(), "Share");
         viewPager.setAdapter(sectionPageAdapter);
     }
 

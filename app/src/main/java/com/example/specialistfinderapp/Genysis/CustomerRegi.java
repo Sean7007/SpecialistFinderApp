@@ -1,8 +1,5 @@
 package com.example.specialistfinderapp.Genysis;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -11,12 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.specialistfinderapp.R;
-import com.example.specialistfinderapp.User;
-import com.example.specialistfinderapp.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,7 +28,7 @@ import java.util.HashMap;
 public class CustomerRegi extends AppCompatActivity {
     //Variable Declaration
     Button register, back;
-    EditText fname, lname, email,phone, password, confPassword;
+    EditText fname, lname, cemail,cphone, password, confPassword;
     AwesomeValidation awesomeValidation;
     private FirebaseAuth mAuth; //declaration of firebase
     DatabaseReference reference;
@@ -45,8 +43,8 @@ public class CustomerRegi extends AppCompatActivity {
         back= findViewById(R.id.back);
         fname= findViewById(R.id.fname);
         lname= findViewById(R.id.lname);
-        email= findViewById(R.id.email);
-        phone= findViewById(R.id.phoneNo);
+        cemail= findViewById(R.id.cemail);
+        cphone= findViewById(R.id.cphoneNo);
         password= findViewById(R.id.password);
         confPassword= findViewById(R.id.confPassword);
 
@@ -58,8 +56,8 @@ public class CustomerRegi extends AppCompatActivity {
         awesomeValidation.addValidation(CustomerRegi.this, R.id.fname, "[a-zA-Z\\s]+", R.string.fnameerr);
         awesomeValidation.addValidation(CustomerRegi.this, R.id.lname, "[a-zA-Z\\s]+", R.string.lnameerr);
         //Validation of email
-        awesomeValidation.addValidation(CustomerRegi.this, R.id.email, Patterns.EMAIL_ADDRESS, R.string.emailerr);
-        awesomeValidation.addValidation(CustomerRegi.this, R.id.phoneNo, RegexTemplate.TELEPHONE, R.string.phoneerr);
+        awesomeValidation.addValidation(CustomerRegi.this, R.id.cemail, Patterns.EMAIL_ADDRESS, R.string.emailerr);
+        awesomeValidation.addValidation(CustomerRegi.this, R.id.cphoneNo, RegexTemplate.TELEPHONE, R.string.phoneerr);
         awesomeValidation.addValidation(CustomerRegi.this, R.id.password, regexPassword, R.string.passerr);
         awesomeValidation.addValidation(CustomerRegi.this, R.id.confPassword, R.id.password, R.string.cnfpasserr);
 
@@ -68,17 +66,17 @@ public class CustomerRegi extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Authenticating variables
-                 String cFName = fname.getText().toString();
-                 String cLName = lname.getText().toString();
-                 String cEmail = email.getText().toString();
-                 String cPhone = phone.getText().toString();
+                 String firstname = fname.getText().toString();
+                 String lastname = lname.getText().toString();
+                 String email = cemail.getText().toString();
+                 String phone = cphone.getText().toString();
                  String cPassword = password.getText().toString();
                 String cConfPassword = confPassword.getText().toString();
 
                 //If validations are met-begin data authentication
                 if(awesomeValidation.validate()){
                     //Authenticating section
-                    mAuth.createUserWithEmailAndPassword(cEmail, cPassword)
+                    mAuth.createUserWithEmailAndPassword(email, cPassword)
                             .addOnCompleteListener(CustomerRegi.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -92,12 +90,12 @@ public class CustomerRegi extends AppCompatActivity {
 
                                         reference = FirebaseDatabase.getInstance().getReference("Users").child("Customers").child(userid);
 
-                                        HashMap<String, String> hashMap = new HashMap<>();
+                                       HashMap<String, String> hashMap = new HashMap<>();
                                         hashMap.put("id", userid);
-                                        hashMap.put("firstname", cFName );
-                                        hashMap.put("lastname", cLName);
-                                        hashMap.put("email", cEmail);
-                                        hashMap.put("phone", cPhone);
+                                        hashMap.put("firstname", firstname );
+                                        hashMap.put("lastname", lastname);
+                                        hashMap.put("email", email);
+                                        hashMap.put("phone", phone);
 
                                         reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
